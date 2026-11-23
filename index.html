@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>FaceID — Распознавание и посещаемость</title>
-<link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#8b5cf6">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -111,12 +110,13 @@ h1{font-family:var(--font-display);font-size:clamp(1.8rem,4vw,2.6rem);font-weigh
 .face-item img{width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);margin-bottom:.4rem}
 .face-item .fi-name{font-weight:600;font-size:.8rem;margin-bottom:.1rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
 .face-item .fi-group{font-size:.68rem;color:var(--accent);font-weight:600;margin-bottom:.1rem}
-.face-actions{position:absolute;top:4px;right:4px;display:flex;gap:4px}
-.face-action-btn{background:rgba(255,255,255,0.1);border:none;color:var(--text);width:22px;height:22px;border-radius:6px;cursor:pointer;display:grid;place-items:center;padding:0;transition:all .2s}
-.face-action-btn.edit:hover{background:var(--primary);color:#fff}
-.face-action-btn.del:hover{background:var(--danger);color:#fff}
-.face-action-btn svg{width:12px;height:12px}
-
+.face-item .fi-delete{position:absolute;top:4px;right:4px;background:rgba(244,63,94,.15);border:1px solid var(--danger);color:var(--danger);width:22px;height:22px;border-radius:6px;cursor:pointer;display:grid;place-items:center;padding:0}
+.face-item .fi-delete:hover{background:var(--danger);color:#fff}
+.face-item .fi-delete svg{width:12px;height:12px}
+.face-item .fi-edit{position:absolute;top:4px;left:4px;background:rgba(34,211,238,.15);border:1px solid var(--accent);color:var(--accent);width:22px;height:22px;border-radius:6px;cursor:pointer;display:grid;place-items:center;padding:0;opacity:0;transition:opacity .2s}
+.face-item:hover .fi-edit{opacity:1}
+.face-item .fi-edit:hover{background:var(--accent);color:#fff}
+.face-item .fi-edit svg{width:12px;height:12px}
 .empty-state{text-align:center;padding:2.5rem 1rem;color:var(--text-dim)}
 .empty-state.grid{grid-column:1/-1}
 .empty-icon{font-size:3rem;margin-bottom:.75rem;opacity:.5}
@@ -126,8 +126,11 @@ h1{font-family:var(--font-display);font-size:clamp(1.8rem,4vw,2.6rem);font-weigh
 .btn svg{width:18px;height:18px;flex-shrink:0}
 .btn:disabled{opacity:.35;cursor:not-allowed}
 .btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-2));box-shadow:0 4px 20px var(--primary-glow)}
+.btn-primary:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 30px var(--primary-glow)}
 .btn-success{background:linear-gradient(135deg,var(--success),#059669);box-shadow:0 4px 20px var(--success-glow)}
+.btn-success:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 30px var(--success-glow)}
 .btn-danger{background:linear-gradient(135deg,var(--danger),#dc2626);box-shadow:0 4px 20px var(--danger-glow)}
+.btn-danger:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 30px var(--danger-glow)}
 .btn.full-width{width:100%}
 .step-label{display:flex;align-items:center;gap:.6rem;font-size:.9rem;font-weight:600;color:var(--text-muted);margin-bottom:.75rem}
 .step-num{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;font-size:.8rem;font-weight:700;flex-shrink:0}
@@ -226,104 +229,6 @@ h1{font-family:var(--font-display);font-size:clamp(1.8rem,4vw,2.6rem);font-weigh
 .stat-rank.top1{color:#fbbf24}
 .stat-rank.top2{color:#94a3b8}
 .stat-rank.top3{color:#cd7f32}
-
-/* ============ LIVE VIDEO MODE ============ */
-.live-stage{
-  position:relative;
-  width:100%;
-  background:#000;
-  border-radius:16px;
-  overflow:hidden;
-  aspect-ratio:16/9;
-  margin-bottom:1rem;
-  border:1px solid var(--border-strong);
-}
-.live-stage video{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-  transform:scaleX(-1); /* зеркало */
-}
-.live-stage canvas{
-  position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  pointer-events:none;
-  transform:scaleX(-1); /* зеркало */
-}
-.live-overlay{
-  position:absolute;
-  top:.75rem;
-  left:.75rem;
-  right:.75rem;
-  display:flex;
-  justify-content:space-between;
-  pointer-events:none;
-  z-index:5;
-  gap:.5rem;
-}
-.live-badge{
-  background:rgba(244,63,94,0.92);
-  color:#fff;
-  padding:.45rem .9rem;
-  border-radius:10px;
-  font-weight:700;
-  font-size:.82rem;
-  display:flex;
-  align-items:center;
-  gap:.45rem;
-  backdrop-filter:blur(8px);
-  box-shadow:0 4px 12px rgba(0,0,0,.3);
-  letter-spacing:.05em;
-}
-.live-badge .pulse{
-  width:8px;
-  height:8px;
-  background:#fff;
-  border-radius:50%;
-  animation:pulse 1.4s ease-in-out infinite;
-  box-shadow:0 0 8px rgba(255,255,255,.6);
-}
-@keyframes pulse{
-  0%,100%{opacity:1;transform:scale(1)}
-  50%{opacity:.3;transform:scale(.8)}
-}
-.live-counter{
-  background:rgba(10,10,15,0.8);
-  backdrop-filter:blur(8px);
-  color:#fff;
-  padding:.45rem .9rem;
-  border-radius:10px;
-  font-weight:600;
-  font-size:.85rem;
-  box-shadow:0 4px 12px rgba(0,0,0,.3);
-  border:1px solid rgba(255,255,255,.1);
-}
-.live-counter b{color:var(--success);font-weight:800;font-size:1rem}
-.live-controls{
-  display:flex;
-  gap:.5rem;
-  flex-wrap:wrap;
-}
-.live-controls .btn{flex:1;min-width:140px}
-.live-tip{
-  background:rgba(245,158,11,.08);
-  border:1px solid rgba(245,158,11,.3);
-  color:var(--warning);
-  padding:.65rem .9rem;
-  border-radius:10px;
-  font-size:.82rem;
-  margin-bottom:1rem;
-  display:flex;
-  gap:.5rem;
-  align-items:flex-start;
-  line-height:1.5;
-}
-.live-tip svg{flex-shrink:0;margin-top:2px}
-
 @media(max-width:900px){.stats-summary{grid-template-columns:1fr 1fr}}
 @media(max-width:768px){
   .stats-summary{grid-template-columns:1fr 1fr;gap:.5rem}
@@ -332,6 +237,28 @@ h1{font-family:var(--font-display);font-size:clamp(1.8rem,4vw,2.6rem);font-weigh
   .mc-bar-date{display:none}
   .stats-table{font-size:.75rem}
   .stats-table th,.stats-table td{padding:.45rem .3rem}
+}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:1000;display:none;align-items:center;justify-content:center;padding:1rem}
+.modal-overlay.show{display:flex}
+.modal-box{background:var(--bg-2);border:1px solid var(--border-strong);border-radius:20px;padding:1.75rem;max-width:420px;width:100%;box-shadow:0 25px 60px rgba(0,0,0,.6);animation:fadeUp .3s ease}
+.modal-box h3{font-family:var(--font-display);font-size:1.2rem;margin-bottom:1.25rem;color:var(--text)}
+.modal-field{margin-bottom:1rem}
+.modal-field label{display:block;font-size:.85rem;font-weight:600;color:var(--text-muted);margin-bottom:.4rem}
+.modal-field input,.modal-field select{width:100%;padding:.8rem 1rem;background:var(--surface-2);border:1px solid var(--border-strong);border-radius:12px;color:var(--text);font-family:inherit;font-size:.95rem}
+.modal-field input:focus,.modal-field select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(139,92,246,.15)}
+.modal-actions{display:flex;gap:.5rem;margin-top:1.25rem}
+.modal-actions .btn{flex:1}
+.mode-toggle-wrap{margin-bottom:1rem;padding:.85rem 1rem;background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.25);border-radius:12px}
+.mode-toggle{display:flex;align-items:center;gap:.75rem;cursor:pointer;user-select:none}
+.mode-toggle input{display:none}
+.mode-toggle-slider{position:relative;width:44px;height:24px;background:var(--surface-2);border:1px solid var(--border-strong);border-radius:999px;transition:all .25s;flex-shrink:0}
+.mode-toggle-slider::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;background:var(--text-muted);border-radius:50%;transition:all .25s}
+.mode-toggle input:checked+.mode-toggle-slider{background:linear-gradient(135deg,var(--primary),var(--primary-2));border-color:transparent}
+.mode-toggle input:checked+.mode-toggle-slider::after{left:22px;background:#fff}
+.mode-toggle-label{font-size:.85rem;font-weight:600;color:var(--text-muted);transition:color .2s}
+.mode-toggle input:checked~.mode-toggle-label{color:var(--text)}
+.mobile-nav{display:none}
+@media(max-width:768px){
   .mobile-nav{display:flex;position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,15,.95);backdrop-filter:blur(20px);border-top:1px solid var(--border-strong);z-index:200;padding:.5rem .5rem calc(.5rem + env(safe-area-inset-bottom, 0));box-shadow:0 -10px 30px rgba(0,0,0,.4)}
   .mobile-nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:.25rem;padding:.65rem .5rem;background:none;border:none;color:var(--text-muted);font-family:inherit;font-size:.7rem;font-weight:600;cursor:pointer;border-radius:12px;transition:all .2s}
   .mobile-nav button svg{width:22px;height:22px}
@@ -371,6 +298,8 @@ h1{font-family:var(--font-display);font-size:clamp(1.8rem,4vw,2.6rem);font-weigh
   .face-item img{width:52px;height:52px}
   .face-item .fi-name{font-size:.72rem}
   .face-item .fi-group{font-size:.62rem}
+  .face-item .fi-delete{width:20px;height:20px;top:3px;right:3px}
+  .face-item .fi-edit{width:20px;height:20px;top:3px;left:3px;opacity:1}
   .photo-previews{grid-template-columns:repeat(auto-fill,minmax(75px,1fr));gap:.5rem}
   .photo-counter{font-size:.75rem}
   .history-item{padding:.7rem .75rem;gap:.6rem;flex-wrap:wrap}
@@ -385,12 +314,6 @@ h1{font-family:var(--font-display);font-size:clamp(1.8rem,4vw,2.6rem);font-weigh
   .photo-stage .overlay-wrap img{max-height:400px}
   .loading-overlay p{font-size:.85rem}
   .spinner{width:36px;height:36px}
-  .live-stage{aspect-ratio:4/3}
-  .live-badge{font-size:.72rem;padding:.35rem .7rem}
-  .live-counter{font-size:.78rem;padding:.35rem .7rem}
-  .live-counter b{font-size:.9rem}
-  .live-controls .btn{min-width:110px;padding:.75rem 1rem;font-size:.82rem}
-  .live-tip{font-size:.75rem;padding:.55rem .75rem}
 }
 @media(max-width:380px){
   .stats-grid{grid-template-columns:1fr 1fr}
@@ -425,69 +348,22 @@ h1{font-family:var(--font-display);font-size:clamp(1.8rem,4vw,2.6rem);font-weigh
 </nav>
 
 <main class="container">
-  <!-- ================= ATTENDANCE TAB ================= -->
   <section id="tab-attendance" class="page active">
     <header class="page-header">
       <h1>Отметка <span class="gradient-text">посещаемости</span></h1>
-      <p class="subtitle">Выберите группу и используйте фото, живую камеру или загрузите до 10 общих фото</p>
+      <p class="subtitle">Выберите группу, загрузите до 10 общих фото — система отметит присутствующих</p>
     </header>
     <div class="glass-card">
       <div class="step-label"><span class="step-num">1</span> Выберите группу</div>
       <div class="group-chips" id="groupChips"><p style="color:var(--text-dim);font-size:.85rem">Загрузка групп…</p></div>
     </div>
-
-    <!-- ============ LIVE VIDEO MODE ============ -->
-    <div class="glass-card" id="liveCard" style="display:none">
-      <div class="card-head">
-        <div class="card-icon accent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7l-7 5 7 5V7zM14 5H3a2 2 0 00-2 2v10a2 2 0 002 2h11a2 2 0 002-2V7a2 2 0 00-2-2z"/></svg></div>
-        <div style="flex:1"><h2>🎥 Режим реального времени</h2><p class="card-desc">Камера с автоматическим распознаванием</p></div>
-      </div>
-      <div class="live-tip">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-        <div>Направьте камеру на студентов. Система будет автоматически отмечать присутствующих. Нажмите <b>«Завершить сессию»</b>, когда закончите.</div>
-      </div>
-      <div class="live-stage" id="liveStage" style="display:none">
-        <video id="liveVideo" autoplay muted playsinline></video>
-        <canvas id="liveCanvas"></canvas>
-        <div class="live-overlay">
-          <div class="live-badge"><span class="pulse"></span> LIVE</div>
-          <div class="live-counter">Отмечено: <b id="liveCount">0</b> / <span id="liveTotal">0</span></div>
-        </div>
-      </div>
-      <div class="live-controls">
-        <button class="btn btn-primary" id="startLiveBtn" onclick="startLive()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7l-7 5 7 5V7zM14 5H3a2 2 0 00-2 2v10a2 2 0 002 2h11a2 2 0 002-2V7a2 2 0 00-2-2z"/></svg>
-          Запустить камеру
-        </button>
-        <button class="btn btn-danger" onclick="stopLive()" id="stopLiveBtn" style="display:none">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="12" height="12"/></svg>
-          Остановить
-        </button>
-        <button class="btn btn-success" onclick="finishLiveSession()" id="finishLiveBtn" style="display:none">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
-          Завершить сессию
-        </button>
-      </div>
-      <div class="status-msg" id="liveStatus"></div>
-    </div>
-
     <div class="glass-card">
-      <div class="step-label"><span class="step-num">2</span> Или загрузите фото группы (до 10)</div>
-      
-      <!-- Кнопка камеры для посещаемости -->
-      <div style="display:flex; gap:10px; margin-bottom:1rem;">
-        <button class="btn btn-primary full-width" id="cameraBtnAtt" style="display:none" onclick="triggerCamera('attendance')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-          Снять с камеры
-        </button>
-        <input type="file" id="cameraInputAtt" accept="image/*" capture="environment" hidden>
-      </div>
-
+      <div class="step-label"><span class="step-num">2</span> Загрузите фото группы (до 10)</div>
       <label for="groupPhotoInput" class="dropzone disabled" id="groupPhotoDropzone">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14M14 8h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-        <span class="dz-title">Выберите до 10 фото</span>
+        <span class="dz-title">Выберите до 10 фото или снимите на камеру</span>
         <span class="dz-hint">Сначала выберите группу</span>
-        <input type="file" id="groupPhotoInput" accept="image/*" multiple hidden>
+        <input type="file" id="groupPhotoInput" accept="image/*" capture="environment" multiple hidden>
       </label>
       <div class="photo-counter" id="photoCounter" style="display:none"></div>
       <div class="photo-previews" id="photoPreviews"></div>
@@ -534,7 +410,6 @@ h1{font-family:var(--font-display);font-size:clamp(1.8rem,4vw,2.6rem);font-weigh
     </div>
   </section>
 
-  <!-- ================= ADMIN TAB ================= -->
   <section id="tab-admin" class="page">
     <header class="page-header">
       <h1>Группы <span class="gradient-text">и студенты</span></h1>
@@ -567,27 +442,47 @@ h1{font-family:var(--font-display);font-size:clamp(1.8rem,4vw,2.6rem);font-weigh
         <button id="clearAllBtn" class="btn btn-danger full-width" style="margin-top:1rem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3"/></svg>Очистить базу</button>
       </div>
     </div>
-    <div class="glass-card" style="margin-top:1.5rem">
+    <div class="glass-card">
+      <div class="card-head">
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/></svg></div>
+        <div style="flex:1"><h2>Резервная копия</h2><p class="card-desc">Скачать/загрузить базу для переноса на другое устройство</p></div>
+      </div>
+      <div class="bulk-info">
+        <div>💾</div>
+        <div><strong>Как перенести данные:</strong> нажмите «Скачать базу» → получите JSON-файл → на другом устройстве откройте сайт и нажмите «Загрузить базу» → выберите файл.</div>
+      </div>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <button id="exportDbBtn" class="btn btn-success" style="flex:1">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          Скачать базу
+        </button>
+        <label for="importDbInput" class="btn btn-primary" style="flex:1;cursor:pointer;margin:0">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+          Загрузить базу
+          <input type="file" id="importDbInput" accept="application/json,.json" hidden>
+        </label>
+      </div>
+      <div class="status-msg" id="backupStatus"></div>
+    </div>
+    <div class="glass-card">
       <div class="card-head">
         <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 16a4 4 0 01-.88-7.9A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg></div>
         <div style="flex:1"><h2>Загрузить фото студентов</h2><p class="card-desc">Сначала выберите группу, затем загрузите фото</p></div>
       </div>
       <div class="group-list" id="groupSelector" style="margin-bottom:1rem"></div>
-      <div class="bulk-info"><div>💡</div><div><strong>Максимальная точность:</strong> загружайте по 2–3 разных фото одного студента. Назовите их <code>Иванов_1.jpg</code>, <code>Иванов_2.jpg</code> — дескрипторы объединятся.</div></div>
-      
-      <div style="display:flex; gap:10px; margin-bottom:1rem;">
-        <button class="btn btn-primary full-width" id="cameraBtnAdmin" style="display:none" onclick="triggerCamera('admin')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-          Сфотографировать студента
-        </button>
-        <input type="file" id="cameraInputAdmin" accept="image/*" capture="environment" hidden>
+      <div class="mode-toggle-wrap">
+        <label class="mode-toggle">
+          <input type="checkbox" id="forceModeInput">
+          <span class="mode-toggle-slider"></span>
+          <span class="mode-toggle-label">Принудительная загрузка (сохранять даже без лица)</span>
+        </label>
       </div>
-
+      <div class="bulk-info"><div>💡</div><div><strong>Максимальная точность:</strong> загружайте по 3–5 разных фото одного студента. Назовите их <code>Иванов_1.jpg</code>, <code>Иванов_2.jpg</code> — дескрипторы объединятся.</div></div>
       <label for="bulkPhotoInput" class="dropzone disabled" id="bulkDropzone">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 16a4 4 0 01-.88-7.9A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
-        <span class="dz-title">Нажмите или перетащите файлы</span>
+        <span class="dz-title">Нажмите, перетащите или снимите на камеру</span>
         <span class="dz-hint">Сначала выберите группу</span>
-        <input type="file" id="bulkPhotoInput" accept="image/*" multiple hidden>
+        <input type="file" id="bulkPhotoInput" accept="image/*" capture="environment" multiple hidden>
       </label>
       <div class="progress-bar" id="progressBar" style="display:none"><div class="progress-fill" id="progressFill"></div></div>
       <div class="bulk-queue" id="bulkQueue"></div>
@@ -595,30 +490,6 @@ h1{font-family:var(--font-display);font-size:clamp(1.8rem,4vw,2.6rem);font-weigh
     </div>
   </section>
 </main>
-
-<!-- ================= EDIT MODAL ================= -->
-<div id="editModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); backdrop-filter:blur(10px); z-index:1000; align-items:center; justify-content:center; padding:1rem;">
-  <div class="glass-card" style="width:100%; max-width:400px; margin:0;">
-    <div class="card-head">
-      <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
-      <div style="flex:1"><h2>Редактировать студента</h2></div>
-    </div>
-    <div style="display:flex; flex-direction:column; gap:1rem;">
-      <div>
-        <label style="font-size:.85rem; color:var(--text-muted); margin-bottom:.25rem; display:block;">ФИО Студента</label>
-        <input type="text" id="editNameInput" style="width:100%; padding:.7rem; background:var(--surface-2); border:1px solid var(--border-strong); border-radius:12px; color:var(--text); font-family:inherit;">
-      </div>
-      <div>
-        <label style="font-size:.85rem; color:var(--text-muted); margin-bottom:.25rem; display:block;">Группа</label>
-        <select id="editGroupSelect" style="width:100%; padding:.7rem; background:var(--surface-2); border:1px solid var(--border-strong); border-radius:12px; color:var(--text); font-family:inherit;"></select>
-      </div>
-      <div style="display:flex; gap:.5rem; margin-top:1rem;">
-        <button class="btn btn-primary" style="flex:1" onclick="saveStudentEdit()">Сохранить</button>
-        <button class="btn btn-danger" style="flex:1; background:var(--surface-2); box-shadow:none;" onclick="closeEditModal()">Отмена</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 <nav class="mobile-nav">
   <button class="active" data-tab="attendance" onclick="switchTab('attendance')">
@@ -631,22 +502,32 @@ h1{font-family:var(--font-display);font-size:clamp(1.8rem,4vw,2.6rem);font-weigh
   </button>
 </nav>
 
+<div class="modal-overlay" id="editModal">
+  <div class="modal-box">
+    <h3>✏️ Редактировать студента</h3>
+    <div class="modal-field">
+      <label>Имя</label>
+      <input type="text" id="editName" placeholder="Имя студента">
+    </div>
+    <div class="modal-field">
+      <label>Группа</label>
+      <select id="editGroup"></select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-success" onclick="saveEditStudent()">💾 Сохранить</button>
+      <button class="btn btn-danger" onclick="closeEditModal()">Отмена</button>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.js"></script>
 <script>
 const MODEL_URL='https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@master/weights';
-const DB_KEY='faceid_db_v3', HISTORY_KEY='faceid_history_v3', MATCH_THRESHOLD=0.5, MAX_PHOTOS=10;
-let modelsReady=false, modelsLoading=false, selectedUploadGroup=null, selectedAttendanceGroup=null, currentResults=null;
-let selectedPhotos=[];
-let editingStudentId = null;
-
-// --- LIVE VIDEO STATE ---
-let liveRunning = false;
-let liveDetected = new Set();
-let liveConfidences = new Map();
-let liveStream = null;
-let liveMatcher = null;
-let lastLiveFrame = 0;
-const LIVE_FRAME_INTERVAL = 200; // ~5 FPS для производительности
+const DB_KEY='faceid_db_v4', HISTORY_KEY='faceid_history_v4';
+const MATCH_THRESHOLD=0.48, MAX_PHOTOS=10;
+let modelsReady=false, modelsLoading=false;
+let selectedUploadGroup=null, selectedAttendanceGroup=null;
+let currentResults=null, selectedPhotos=[], editingStudentId=null;
 
 function getDB(){try{return JSON.parse(localStorage.getItem(DB_KEY)||'{"groups":[],"students":[]}')}catch{return{groups:[],students:[]}}}
 function saveDB(db){localStorage.setItem(DB_KEY,JSON.stringify(db))}
@@ -659,297 +540,41 @@ function cleanName(fn){let n=fn.replace(/\.[^.]+$/,'');n=n.replace(/_\d+$/,'');n
 function showStatus(id,msg,type='info',timeout=4000){const el=document.getElementById(id);if(!el)return;el.textContent=msg;el.className='status-msg show '+type;if(timeout)setTimeout(()=>{el.className='status-msg'},timeout)}
 
 async function loadModels(){
-  if(modelsReady||modelsLoading)return; modelsLoading=true;
+  if(modelsReady||modelsLoading)return;modelsLoading=true;
   try{
     console.log('⏳ Загрузка моделей...');
     await Promise.all([
       faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
-      faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
       faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
       faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL)
     ]);
-    modelsReady=true; console.log('✅ Модели загружены');
+    modelsReady=true;console.log('✅ Модели загружены');
     showStatus('adminStatus','✅ Нейросеть готова','success',3000);
   }catch(err){
     console.error('❌ Ошибка моделей:',err);
-    showStatus('adminStatus','❌ Не удалось загрузить модели. Проверьте интернет.','error',0);
-    showStatus('mainStatus','❌ Не удалось загрузить модели. Проверьте интернет.','error',0);
+    showStatus('adminStatus','❌ Не удалось загрузить модели.','error',0);
+    showStatus('mainStatus','❌ Не удалось загрузить модели.','error',0);
   }finally{modelsLoading=false}
 }
 
 function switchTab(tab){
-  stopLive(); // останавливаем камеру при переключении
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('tab-'+tab).classList.add('active');
-  document.querySelectorAll('.nav-tab, .mobile-nav button').forEach(b=>{
-    b.classList.toggle('active', b.dataset.tab === tab);
-  });
+  document.querySelectorAll('.nav-tab, .mobile-nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
   window.scrollTo({top:0,behavior:'smooth'});
   if(tab==='admin'){renderAdminGroups();renderStudents()}
   if(tab==='attendance'){renderAttendanceGroups();renderHistory();renderStats()}
 }
 
-// --- CAMERA LOGIC ---
-window.triggerCamera = (mode) => {
-  const inputId = mode === 'admin' ? 'cameraInputAdmin' : 'cameraInputAtt';
-  document.getElementById(inputId).click();
-};
-
-document.getElementById('cameraInputAdmin').addEventListener('change', async (e) => {
-  if(e.target.files && e.target.files[0]) {
-    processFiles([e.target.files[0]]);
-    e.target.value = '';
-  }
-});
-
-document.getElementById('cameraInputAtt').addEventListener('change', async (e) => {
-  if(e.target.files && e.target.files[0]) {
-    addPhotos([e.target.files[0]]);
-    e.target.value = '';
-  }
-});
-
-// --- LIVE VIDEO FUNCTIONS ---
-async function startLive(){
-  if(!selectedAttendanceGroup){showStatus('liveStatus','Сначала выберите группу!','error');return}
-  if(!modelsReady){showStatus('liveStatus','Нейросеть загружается…','info');await loadModels();if(!modelsReady)return}
-
-  const db=getDB();
-  const groupStudents=db.students.filter(s=>s.group===selectedAttendanceGroup);
-  if(groupStudents.length===0){
-    showStatus('liveStatus','В группе «'+selectedAttendanceGroup+'» нет студентов. Загрузите их в админ-панели.','error',0);
-    return;
-  }
-
-  try{
-    showStatus('liveStatus','📷 Запрашиваем доступ к камере…','info');
-    liveStream = await navigator.mediaDevices.getUserMedia({
-      video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: 'user' },
-      audio: false
-    });
-
-    const video = document.getElementById('liveVideo');
-    video.srcObject = liveStream;
-    await video.play();
-
-    document.getElementById('liveStage').style.display = 'block';
-    document.getElementById('startLiveBtn').style.display = 'none';
-    document.getElementById('stopLiveBtn').style.display = 'inline-flex';
-    document.getElementById('finishLiveBtn').style.display = 'inline-flex';
-
-    liveDetected = new Set();
-    liveConfidences = new Map();
-    document.getElementById('liveCount').textContent = '0';
-    document.getElementById('liveTotal').textContent = groupStudents.length;
-
-    // Создаём matcher для группы
-    liveMatcher = new faceapi.FaceMatcher(
-      groupStudents.map(s => new faceapi.LabeledFaceDescriptors(
-        s.name,
-        s.descriptors.map(d => new Float32Array(d))
-      )),
-      MATCH_THRESHOLD
-    );
-
-    liveRunning = true;
-    lastLiveFrame = 0;
-    showStatus('liveStatus','🎥 Камера запущена! Отмечайте студентов в реальном времени.','success',4000);
-    requestAnimationFrame(liveLoop);
-  } catch(err){
-    console.error('Ошибка камеры:',err);
-    let msg = '❌ Ошибка доступа к камере: ' + err.message;
-    if(err.name === 'NotAllowedError') msg = '❌ Вы запретили доступ к камере. Разрешите в настройках браузера.';
-    if(err.name === 'NotFoundError') msg = '❌ Камера не найдена на этом устройстве.';
-    showStatus('liveStatus', msg, 'error', 0);
-  }
-}
-
-async function liveLoop(timestamp){
-  if(!liveRunning) return;
-
-  // Пропускаем кадр, если прошло мало времени (для производительности)
-  if(timestamp - lastLiveFrame < LIVE_FRAME_INTERVAL){
-    requestAnimationFrame(liveLoop);
-    return;
-  }
-  lastLiveFrame = timestamp;
-
-  const video = document.getElementById('liveVideo');
-  const canvas = document.getElementById('liveCanvas');
-
-  if(video.videoWidth === 0 || video.paused || video.ended){
-    requestAnimationFrame(liveLoop);
-    return;
-  }
-
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
-  const ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  try{
-    // Используем TinyFaceDetector - он быстрее и легче
-    const options = new faceapi.TinyFaceDetectorOptions({
-      inputSize: 416,
-      scoreThreshold: 0.5
-    });
-
-    const detections = await faceapi.detectAllFaces(video, options)
-      .withFaceLandmarks()
-      .withFaceDescriptors();
-
-    for(const det of detections){
-      const box = det.detection.box;
-      const match = liveMatcher.findBestMatch(det.descriptor);
-
-      let color = '#f43f5e', label = 'Неизвестный', conf = 0;
-      if(match.label !== 'unknown'){
-        color = '#10b981';
-        label = match.label;
-        conf = Math.round((1 - match.distance) * 100);
-
-        if(!liveDetected.has(label)){
-          liveDetected.add(label);
-          liveConfidences.set(label, conf);
-          document.getElementById('liveCount').textContent = liveDetected.size;
-        } else {
-          const prev = liveConfidences.get(label);
-          if(conf > prev) liveConfidences.set(label, conf);
-        }
-      }
-
-      // Рисуем рамку
-      const lw = Math.max(3, Math.round(canvas.width / 220));
-      ctx.strokeStyle = color;
-      ctx.lineWidth = lw;
-      ctx.shadowColor = color;
-      ctx.shadowBlur = 12;
-      ctx.strokeRect(box.x, box.y, box.width, box.height);
-      ctx.shadowBlur = 0;
-
-      // Углы рамки для стиля
-      const corner = Math.min(box.width, box.height) * 0.2;
-      ctx.lineWidth = lw * 1.5;
-      ctx.beginPath();
-      // верхний левый
-      ctx.moveTo(box.x, box.y + corner);
-      ctx.lineTo(box.x, box.y);
-      ctx.lineTo(box.x + corner, box.y);
-      // верхний правый
-      ctx.moveTo(box.x + box.width - corner, box.y);
-      ctx.lineTo(box.x + box.width, box.y);
-      ctx.lineTo(box.x + box.width, box.y + corner);
-      // нижний правый
-      ctx.moveTo(box.x + box.width, box.y + box.height - corner);
-      ctx.lineTo(box.x + box.width, box.y + box.height);
-      ctx.lineTo(box.x + box.width - corner, box.y + box.height);
-      // нижний левый
-      ctx.moveTo(box.x + corner, box.y + box.height);
-      ctx.lineTo(box.x, box.y + box.height);
-      ctx.lineTo(box.x, box.y + box.height - corner);
-      ctx.stroke();
-
-      // Плашка с именем
-      const fontSize = Math.max(16, Math.round(canvas.width / 40));
-      ctx.font = `700 ${fontSize}px Inter, sans-serif`;
-      const tw = ctx.measureText(label).width;
-      const pad = fontSize * 0.4;
-      const lh = fontSize + pad * 2;
-      let lx = box.x, ly = box.y - lh - 6;
-      if(ly < 4) ly = box.y + box.height + 6;
-      if(lx + tw + pad * 2 > canvas.width) lx = canvas.width - tw - pad * 2 - 4;
-      if(lx < 4) lx = 4;
-
-      ctx.fillStyle = color;
-      ctx.fillRect(lx, ly, tw + pad * 2, lh);
-      ctx.fillStyle = '#fff';
-      ctx.textBaseline = 'top';
-      ctx.fillText(label, lx + pad, ly + pad);
-    }
-  } catch(err){
-    console.error('Live loop error:', err);
-  }
-
-  requestAnimationFrame(liveLoop);
-}
-
-function stopLive(){
-  liveRunning = false;
-  if(liveStream){
-    liveStream.getTracks().forEach(t => t.stop());
-    liveStream = null;
-  }
-  const video = document.getElementById('liveVideo');
-  if(video) video.srcObject = null;
-  
-  document.getElementById('liveStage').style.display = 'none';
-  document.getElementById('startLiveBtn').style.display = 'inline-flex';
-  document.getElementById('stopLiveBtn').style.display = 'none';
-  document.getElementById('finishLiveBtn').style.display = 'none';
-}
-
-function finishLiveSession(){
-  if(liveDetected.size === 0){
-    if(!confirm('Никто не отмечен. Завершить сессию?')) return;
-  } else {
-    if(!confirm(`Завершить сессию? Отмечено студентов: ${liveDetected.size}`)) return;
-  }
-
-  const db = getDB();
-  const groupStudents = db.students.filter(s => s.group === selectedAttendanceGroup);
-
-  const rows = groupStudents.map(s => {
-    const isPresent = liveDetected.has(s.name);
-    return {
-      name: s.name,
-      group: s.group,
-      photo: s.photo,
-      present: isPresent,
-      confidence: isPresent ? liveConfidences.get(s.name) : null
-    };
-  });
-  rows.sort((a,b) => (b.present - a.present) || a.name.localeCompare(b.name));
-
-  const presentCount = liveDetected.size;
-  const absentCount = groupStudents.length - presentCount;
-
-  currentResults = {
-    group: selectedAttendanceGroup,
-    rows,
-    stats: { presentCount, absentCount, unknownCount: 0 },
-    photoCount: 1,
-    date: new Date().toISOString(),
-    isLive: true
-  };
-
-  renderAttendanceTable();
-  saveCurrentToHistory();
-  stopLive();
-  showStatus('mainStatus', '✅ Live-сессия завершена! Присутствуют: ' + presentCount + ' из ' + groupStudents.length, 'success', 6000);
-  document.getElementById('resultSection').scrollIntoView({behavior:'smooth', block:'start'});
-}
-
-// --- GROUP & STUDENT MANAGEMENT ---
 function renderAdminGroups(){
   const db=getDB();
   const list=document.getElementById('groupList'),selector=document.getElementById('groupSelector');
   document.getElementById('groupCountBadge').textContent=db.groups.length;
-  
-  const camBtnAtt = document.getElementById('cameraBtnAtt');
-  const camBtnAdmin = document.getElementById('cameraBtnAdmin');
-  
   if(db.groups.length===0){
     list.innerHTML='<p style="color:var(--text-dim);font-size:.85rem">Групп пока нет. Создайте первую.</p>';
     selector.innerHTML='<p style="color:var(--text-dim);font-size:.85rem">Сначала создайте группу</p>';
-    document.getElementById('bulkDropzone').classList.add('disabled');
-    if(camBtnAtt) camBtnAtt.style.display = 'none';
-    if(camBtnAdmin) camBtnAdmin.style.display = 'none';
-    return;
+    document.getElementById('bulkDropzone').classList.add('disabled');return;
   }
-  
-  if(camBtnAtt) camBtnAtt.style.display = selectedAttendanceGroup ? 'flex' : 'none';
-  if(camBtnAdmin) camBtnAdmin.style.display = selectedUploadGroup ? 'flex' : 'none';
-
   list.innerHTML=db.groups.map(g=>{
     const count=db.students.filter(s=>s.group===g).length;
     return '<div class="group-tag">'+escapeHtml(g)+'<span class="gt-count">'+count+'</span><button class="gt-del" onclick="deleteGroup(\''+escapeHtml(g).replace(/'/g,"\\'")+'\')" title="Удалить"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 18L18 6M6 6l12 12"/></svg></button></div>';
@@ -981,65 +606,20 @@ function renderStudents(){
     list.innerHTML='<div class="empty-state grid"><div class="empty-icon">👤</div><div class="empty-title">'+(q?'Ничего не найдено':'Студентов нет')+'</div><div class="empty-desc">'+(q?'Попробуйте другой запрос':'Загрузите фото ниже')+'</div></div>';return;
   }
   list.innerHTML=filtered.map(s=>{
-    const dc=s.descriptors?s.descriptors.length:1;
-    return `<div class="face-item">
-      <div class="face-actions">
-        <button class="face-action-btn edit" onclick="openEditModal(${s.id})" title="Редактировать">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-        </button>
-        <button class="face-action-btn del" onclick="deleteStudent(${s.id})" title="Удалить">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 18L18 6M6 6l12 12"/></svg>
-        </button>
-      </div>
-      <img src="${s.photo}" alt="${escapeHtml(s.name)}">
-      <div class="fi-name">${escapeHtml(s.name)}</div>
-      <div class="fi-group">${escapeHtml(s.group)}${dc>1?' · '+dc+' фото':''}</div>
-    </div>`;
+    const dc=s.descriptors?s.descriptors.length:0;
+    const noFace=!s.descriptors||s.descriptors.length===0;
+    const groupInfo=noFace
+      ?'<span style="color:var(--warning)">⚠️ без лица</span>'
+      :escapeHtml(s.group)+(dc>1?' · '+dc+' фото':'');
+    return '<div class="face-item" style="'+(noFace?'border-color:rgba(245,158,11,.4)':'')+'">'+
+      '<button class="fi-edit" onclick="openEditModal('+s.id+')" title="Редактировать"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>'+
+      '<button class="fi-delete" onclick="deleteStudent('+s.id+')" title="Удалить"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 18L18 6M6 6l12 12"/></svg></button>'+
+      '<img src="'+s.photo+'" alt="'+escapeHtml(s.name)+'" style="'+(noFace?'filter:grayscale(.5);opacity:.7':'')+'">'+
+      '<div class="fi-name">'+escapeHtml(s.name)+'</div>'+
+      '<div class="fi-group">'+groupInfo+'</div>'+
+      '</div>';
   }).join('');
 }
-
-window.openEditModal = (id) => {
-  const db = getDB();
-  const student = db.students.find(s => s.id === id);
-  if (!student) return;
-  
-  editingStudentId = id;
-  document.getElementById('editNameInput').value = student.name;
-  
-  const select = document.getElementById('editGroupSelect');
-  select.innerHTML = db.groups.map(g => 
-    `<option value="${g}" ${g === student.group ? 'selected' : ''}>${g}</option>`
-  ).join('');
-  
-  document.getElementById('editModal').style.display = 'flex';
-};
-
-window.closeEditModal = () => {
-  document.getElementById('editModal').style.display = 'none';
-  editingStudentId = null;
-};
-
-window.saveStudentEdit = () => {
-  if (!editingStudentId) return;
-  const newName = document.getElementById('editNameInput').value.trim();
-  const newGroup = document.getElementById('editGroupSelect').value;
-  
-  if (!newName) { alert('Имя не может быть пустым'); return; }
-  
-  const db = getDB();
-  const idx = db.students.findIndex(s => s.id === editingStudentId);
-  if (idx !== -1) {
-    db.students[idx].name = newName;
-    db.students[idx].group = newGroup;
-    saveDB(db);
-    renderStudents();
-    renderAdminGroups();
-    renderAttendanceGroups();
-    closeEditModal();
-    showStatus('adminStatus', 'Данные студента обновлены', 'success', 2000);
-  }
-};
-
 window.deleteStudent=id=>{
   if(!confirm('Удалить этого студента?'))return;
   const db=getDB();db.students=db.students.filter(s=>s.id!==id);saveDB(db);
@@ -1052,6 +632,30 @@ document.getElementById('clearAllBtn').addEventListener('click',()=>{
   renderAdminGroups();renderStudents();renderAttendanceGroups();renderStats();showStatus('adminStatus','База очищена','success',2000);
 });
 
+window.openEditModal=(id)=>{
+  const db=getDB();const student=db.students.find(s=>s.id===id);if(!student)return;
+  editingStudentId=id;
+  document.getElementById('editName').value=student.name;
+  const groupSelect=document.getElementById('editGroup');
+  groupSelect.innerHTML=db.groups.map(g=>'<option value="'+escapeHtml(g)+'" '+(g===student.group?'selected':'')+'>'+escapeHtml(g)+'</option>').join('');
+  document.getElementById('editModal').classList.add('show');
+};
+window.closeEditModal=()=>{document.getElementById('editModal').classList.remove('show');editingStudentId=null};
+window.saveEditStudent=()=>{
+  if(!editingStudentId)return;
+  const newName=document.getElementById('editName').value.trim();
+  const newGroup=document.getElementById('editGroup').value;
+  if(!newName){alert('Введите имя');return}
+  if(!newGroup){alert('Выберите группу');return}
+  const db=getDB();const student=db.students.find(s=>s.id===editingStudentId);if(!student)return;
+  const dup=db.students.find(s=>s.id!==editingStudentId&&s.name.toLowerCase()===newName.toLowerCase()&&s.group===newGroup);
+  if(dup){alert('Студент с таким именем уже есть в этой группе');return}
+  student.name=newName;student.group=newGroup;saveDB(db);
+  closeEditModal();renderStudents();renderAdminGroups();renderStats();
+  showStatus('adminStatus','✅ Студент обновлён','success',2000);
+};
+document.getElementById('editModal')?.addEventListener('click',(e)=>{if(e.target.id==='editModal')closeEditModal()});
+
 const bulkInput=document.getElementById('bulkPhotoInput'),bulkQueue=document.getElementById('bulkQueue'),progressBar=document.getElementById('progressBar'),progressFill=document.getElementById('progressFill'),bulkDropzone=document.getElementById('bulkDropzone');
 bulkInput.addEventListener('change',e=>{const files=Array.from(e.target.files);if(files.length)processFiles(files);e.target.value=''});
 ['dragenter','dragover'].forEach(ev=>bulkDropzone.addEventListener(ev,e=>{e.preventDefault();bulkDropzone.classList.add('dragover')}));
@@ -1060,8 +664,11 @@ bulkDropzone.addEventListener('drop',e=>{const files=Array.from(e.dataTransfer.f
 
 async function processFiles(files){
   if(!selectedUploadGroup){showStatus('adminStatus','Сначала выберите группу!','error');return}
-  if(!modelsReady){showStatus('adminStatus','Нейросеть загружается, подождите…','info');await loadModels();if(!modelsReady){showStatus('adminStatus','Модели не загрузились','error');return}}
-  console.log('📁 Обработка', files.length, 'файлов для', selectedUploadGroup);
+  if(!modelsReady){showStatus('adminStatus','Нейросеть загружается…','info');await loadModels();if(!modelsReady){showStatus('adminStatus','Модели не загрузились','error');return}}
+
+  const forceMode = document.getElementById('forceModeInput').checked;
+  console.log('📁 Обработка', files.length, 'файлов | режим:', forceMode ? 'ПРИНУДИТЕЛЬНЫЙ' : 'строгий');
+
   bulkQueue.innerHTML='';
   const queue=files.map(f=>{
     const item=document.createElement('div');item.className='bulk-item';
@@ -1071,59 +678,88 @@ async function processFiles(files){
     bulkQueue.appendChild(item);return{file:f,name,statusEl:item.querySelector('.bi-status')};
   });
   progressBar.style.display='block';progressFill.style.width='0%';
-  const db=getDB();let added=0,appended=0,failed=0;
+  const db=getDB();let added=0,appended=0,failed=0,addedWithoutFace=0;
+
   for(let i=0;i<queue.length;i++){
     const q=queue[i];q.statusEl.textContent='Обработка…';q.statusEl.className='bi-status processing';
     try{
       const img=await fileToImage(q.file);
-      const det=await faceapi.detectSingleFace(img, new faceapi.SsdMobilenetv1Options({minConfidence: 0.5})).withFaceLandmarks().withFaceDescriptor();
+      const det=await faceapi.detectSingleFace(img,new faceapi.SsdMobilenetv1Options({minConfidence:0.3})).withFaceLandmarks().withFaceDescriptor();
+      const thumb=makeThumb(img,200);
+
       if(!det){
-        q.statusEl.textContent='Лицо не найдено';q.statusEl.className='bi-status error';failed++;
+        if(forceMode){
+          const existing=db.students.find(s=>s.name.toLowerCase()===q.name.toLowerCase()&&s.group===selectedUploadGroup);
+          if(existing){
+            if(!existing.descriptors||existing.descriptors.length===0){
+              existing.photo=thumb;
+              q.statusEl.textContent='✓ Фото обновлено (без лица)';
+              q.statusEl.className='bi-status success';
+              addedWithoutFace++;
+            } else {
+              q.statusEl.textContent='Уже есть с лицом';
+              q.statusEl.className='bi-status error';
+              failed++;
+            }
+          } else {
+            db.students.push({id:Date.now()+i,name:q.name,group:selectedUploadGroup,descriptors:[],photo:thumb,createdAt:new Date().toISOString(),noFace:true});
+            q.statusEl.textContent='✓ Сохранено (без лица)';
+            q.statusEl.className='bi-status success';
+            addedWithoutFace++;
+          }
+        } else {
+          q.statusEl.textContent='Лицо не найдено';
+          q.statusEl.className='bi-status error';
+          failed++;
+        }
       } else {
         const existing=db.students.find(s=>s.name.toLowerCase()===q.name.toLowerCase()&&s.group===selectedUploadGroup);
-        if(existing){existing.descriptors.push(Array.from(det.descriptor));q.statusEl.textContent='✓ +1 дескриптор';q.statusEl.className='bi-status success';appended++}
-        else{const thumb=makeThumb(img,200);db.students.push({id:Date.now()+i,name:q.name,group:selectedUploadGroup,descriptors:[Array.from(det.descriptor)],photo:thumb,createdAt:new Date().toISOString()});q.statusEl.textContent='✓ Добавлено';q.statusEl.className='bi-status success';added++}
+        if(existing){
+          if(!existing.descriptors)existing.descriptors=[];
+          existing.descriptors.push(Array.from(det.descriptor));
+          if(!existing.photo)existing.photo=thumb;
+          delete existing.noFace;
+          q.statusEl.textContent='✓ +1 дескриптор';
+          q.statusEl.className='bi-status success';
+          appended++;
+        } else {
+          db.students.push({id:Date.now()+i,name:q.name,group:selectedUploadGroup,descriptors:[Array.from(det.descriptor)],photo:thumb,createdAt:new Date().toISOString()});
+          q.statusEl.textContent='✓ Добавлено';
+          q.statusEl.className='bi-status success';
+          added++;
+        }
       }
-    }catch(err){console.error(err);q.statusEl.textContent='Ошибка';q.statusEl.className='bi-status error';failed++}
+    }catch(err){
+      console.error(err);
+      q.statusEl.textContent='Ошибка';
+      q.statusEl.className='bi-status error';
+      failed++;
+    }
     progressFill.style.width=Math.round(((i+1)/queue.length)*100)+'%';
   }
+
   saveDB(db);
-  console.log('💾 База сохранена. Студентов:', db.students.length);
   renderStudents();renderAdminGroups();renderAttendanceGroups();renderStats();
-  showStatus('adminStatus','Новых: '+added+' · +дескрипторов: '+appended+' · Ошибок: '+failed,(added+appended)>0?'success':'error',8000);
+  const summary='С лицом: '+(added+appended)+' · Без лица: '+addedWithoutFace+' · Ошибок: '+failed;
+  showStatus('adminStatus',summary,(added+appended+addedWithoutFace)>0?'success':'error',8000);
   setTimeout(()=>{progressBar.style.display='none'},2000);
 }
 
 function renderAttendanceGroups(){
   const db=getDB();const chips=document.getElementById('groupChips');
-  const liveCard = document.getElementById('liveCard');
-  if(db.groups.length===0){
-    chips.innerHTML='<p style="color:var(--text-dim);font-size:.85rem">Групп нет. Создайте в админ-панели →</p>';
-    if(liveCard) liveCard.style.display = 'none';
-    return;
-  }
+  if(db.groups.length===0){chips.innerHTML='<p style="color:var(--text-dim);font-size:.85rem">Групп нет. Создайте в админ-панели →</p>';return}
   chips.innerHTML=db.groups.map(g=>{
     const count=db.students.filter(s=>s.group===g).length;
     return '<button class="group-chip '+(selectedAttendanceGroup===g?'active':'')+'" onclick="selectAttendanceGroup(\''+escapeHtml(g).replace(/'/g,"\\'")+'\')">'+escapeHtml(g)+' <span style="opacity:.7;font-size:.75rem">('+count+')</span></button>';
   }).join('');
 }
 window.selectAttendanceGroup=g=>{
-  stopLive(); // останавливаем live при смене группы
   selectedAttendanceGroup=g;
   selectedPhotos.forEach(p=>URL.revokeObjectURL(p.preview));
   selectedPhotos=[];
-  renderPhotoPreviews();
-  renderAttendanceGroups();
-  renderStats();
-  
+  renderPhotoPreviews();renderAttendanceGroups();renderStats();
   const dz=document.getElementById('groupPhotoDropzone');dz.classList.remove('disabled');
   dz.querySelector('.dz-hint').textContent='Группа: '+g+' · до '+MAX_PHOTOS+' фото';
-  
-  // Показываем live card и кнопку камеры
-  document.getElementById('liveCard').style.display = 'block';
-  const camBtn = document.getElementById('cameraBtnAtt');
-  if(camBtn) camBtn.style.display = 'flex';
-  
   showStatus('mainStatus','Выбрана группа: '+g,'info',2000);
 };
 
@@ -1173,8 +809,16 @@ async function processAllPhotos(){
   if(!modelsReady){showStatus('mainStatus','Нейросеть загружается…','info');await loadModels();if(!modelsReady)return}
   if(selectedPhotos.length===0){showStatus('mainStatus','Нет фото для анализа','error');return}
   const db=getDB();
-  const groupStudents=db.students.filter(s=>s.group===selectedAttendanceGroup);
-  if(groupStudents.length===0){showStatus('mainStatus','В группе «'+selectedAttendanceGroup+'» нет студентов.','error');return}
+  const groupStudents=db.students.filter(s=>s.group===selectedAttendanceGroup&&s.descriptors&&s.descriptors.length>0);
+  const allGroupStudents=db.students.filter(s=>s.group===selectedAttendanceGroup);
+  if(groupStudents.length===0){
+    if(allGroupStudents.length>0){
+      showStatus('mainStatus','В группе есть студенты, но нет ни одного с распознаваемым лицом.','error',6000);
+    } else {
+      showStatus('mainStatus','В группе «'+selectedAttendanceGroup+'» нет студентов.','error');
+    }
+    return;
+  }
   loadingOverlay.style.display='flex';resultSection.style.display='none';photoStage.classList.add('show');
   searchImg.src=selectedPhotos[0].preview;
   const matcher=new faceapi.FaceMatcher(groupStudents.map(s=>new faceapi.LabeledFaceDescriptors(s.name,s.descriptors.map(d=>new Float32Array(d)))),MATCH_THRESHOLD);
@@ -1185,7 +829,7 @@ async function processAllPhotos(){
       const p=selectedPhotos[i];
       try{
         const img=await fileToImage(p.file);
-        const detections=await faceapi.detectAllFaces(img,new faceapi.SsdMobilenetv1Options({minConfidence:0.4})).withFaceLandmarks().withFaceDescriptors();
+        const detections=await faceapi.detectAllFaces(img,new faceapi.SsdMobilenetv1Options({minConfidence:0.25})).withFaceLandmarks().withFaceDescriptors();
         for(const det of detections){
           const r=matcher.findBestMatch(det.descriptor);
           if(r.label!=='unknown'){
@@ -1203,63 +847,114 @@ async function processAllPhotos(){
     await new Promise(res=>{if(searchImg.complete)res();else searchImg.onload=res});
     const canvas=searchOverlay;canvas.width=firstImg.width;canvas.height=firstImg.height;
     const ctx=canvas.getContext('2d');ctx.drawImage(firstImg,0,0);
-    const firstDetections=await faceapi.detectAllFaces(firstImg,new faceapi.SsdMobilenetv1Options({minConfidence:0.4})).withFaceLandmarks().withFaceDescriptors();
+    const firstDetections=await faceapi.detectAllFaces(firstImg,new faceapi.SsdMobilenetv1Options({minConfidence:0.25})).withFaceLandmarks().withFaceDescriptors();
+
+    // Собираем рамки
+    const boxesData = [];
     for(const det of firstDetections){
-      const box=det.detection.box;const r=matcher.findBestMatch(det.descriptor);
-      let color='#f43f5e',label='Неизвестный';
-      if(r.label!=='unknown'){color='#10b981';label=r.label}
-      ctx.strokeStyle=color;ctx.lineWidth=Math.max(2,Math.round(firstImg.width/350));
-      ctx.strokeRect(box.x,box.y,box.width,box.height);
-      const fontSize=Math.max(11,Math.round(firstImg.width/70));
-      ctx.font='700 '+fontSize+'px Inter, sans-serif';
-      const tw=ctx.measureText(label).width;const pad=fontSize*0.4;const lh=fontSize+pad*2;
-      let lx=box.x,ly=box.y-lh-4;
-      if(ly<4)ly=box.y+box.height+4;
-      if(lx+tw+pad*2>firstImg.width)lx=firstImg.width-tw-pad*2-4;
-      if(lx<4)lx=4;
-      ctx.fillStyle=color;ctx.fillRect(lx,ly,tw+pad*2,lh);
-      ctx.fillStyle='#fff';ctx.textBaseline='top';ctx.fillText(label,lx+pad,ly+pad);
+      const box = det.detection.box;
+      const r = matcher.findBestMatch(det.descriptor);
+      let color = '#f43f5e', label = 'Неизвестный';
+      if(r.label !== 'unknown'){ color = '#10b981'; label = r.label; }
+      boxesData.push({box, color, label});
     }
+
+    // Рисуем рамки (тонкие)
+    ctx.lineWidth = Math.max(2, Math.round(firstImg.width / 400));
+    for(const b of boxesData){
+      ctx.strokeStyle = b.color;
+      ctx.strokeRect(b.box.x, b.box.y, b.box.width, b.box.height);
+    }
+
+    // Подписи с проверкой пересечений
+    const fontSize = Math.max(10, Math.round(firstImg.width / 90));
+    ctx.font = '600 ' + fontSize + 'px Inter, sans-serif';
+    ctx.textBaseline = 'top';
+
+    const placedRects = [];
+    function rectsOverlap(a, b){
+      return !(a.x + a.w < b.x || b.x + b.w < a.x || a.y + a.h < b.y || b.y + b.h < a.y);
+    }
+
+    for(const item of boxesData){
+      const {box, color, label} = item;
+      const tw = ctx.measureText(label).width;
+      const pad = fontSize * 0.4;
+      const lw = tw + pad * 2;
+      const lh = fontSize + pad * 2;
+
+      const candidates = [
+        {x: box.x, y: box.y - lh - 4},
+        {x: box.x, y: box.y + box.height + 4},
+        {x: box.x + box.width - lw, y: box.y - lh - 4},
+        {x: box.x + box.width - lw, y: box.y + box.height + 4},
+        {x: box.x - lw - 4, y: box.y + box.height / 2 - lh / 2},
+        {x: box.x + box.width + 4, y: box.y + box.height / 2 - lh / 2}
+      ];
+
+      let placed = null;
+      for(const c of candidates){
+        const testRect = {x: c.x, y: c.y, w: lw, h: lh};
+        if(testRect.x < 4 || testRect.y < 4 || testRect.x + testRect.w > firstImg.width - 4 || testRect.y + testRect.h > firstImg.height - 4) continue;
+        let overlap = false;
+        for(const p of placedRects){
+          if(rectsOverlap(testRect, p)){ overlap = true; break; }
+        }
+        if(!overlap){ placed = c; break; }
+      }
+
+      if(!placed) placed = {x: box.x, y: Math.max(4, box.y - lh - 4)};
+
+      let lx = Math.max(4, Math.min(placed.x, firstImg.width - lw - 4));
+      let ly = Math.max(4, Math.min(placed.y, firstImg.height - lh - 4));
+
+      placedRects.push({x: lx, y: ly, w: lw, h: lh});
+
+      ctx.fillStyle = color + 'cc';
+      ctx.fillRect(lx, ly, lw, lh);
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1;
+      ctx.strokeRect(lx, ly, lw, lh);
+      ctx.fillStyle = '#fff';
+      ctx.fillText(label, lx + pad, ly + pad);
+    }
+
     const rows=groupStudents.map(s=>{
       const isPresent=allPresentNames.has(s.name);
       return{name:s.name,group:s.group,photo:s.photo,present:isPresent,confidence:isPresent?bestConfidence.get(s.name):null};
     });
+    allGroupStudents.forEach(s=>{
+      if(!s.descriptors||s.descriptors.length===0){
+        rows.push({name:s.name,group:s.group,photo:s.photo,present:false,confidence:null,noFace:true});
+      }
+    });
     rows.sort((a,b)=>(b.present-a.present)||a.name.localeCompare(b.name));
-    const presentCount=allPresentNames.size,absentCount=groupStudents.length-presentCount;
-    
+    const presentCount=allPresentNames.size,absentCount=allGroupStudents.length-presentCount;
+    document.getElementById('statPresent').textContent=presentCount;
+    document.getElementById('statAbsent').textContent=Math.max(0,absentCount);
+    document.getElementById('statUnknown').textContent=totalUnknown;
+    document.getElementById('resultGroupName').textContent='Группа: '+selectedAttendanceGroup+' · Всего: '+allGroupStudents.length+' · Фото: '+selectedPhotos.length;
+    document.getElementById('attendanceBody').innerHTML=rows.map(r=>{
+      const rowClass=r.present?'row-present':'row-absent';
+      const statusHtml=r.noFace
+        ?'<span class="att-status absent" style="background:rgba(245,158,11,.15);color:var(--warning)">⚠️ Без лица</span>'
+        :(r.present?'<span class="att-status present">✓ Присутствует</span>':'<span class="att-status absent">✗ Отсутствует</span>');
+      let confHtml='—';
+      if(r.present){const cls=r.confidence>=80?'high':(r.confidence>=60?'medium':'low');confHtml='<span class="att-confidence '+cls+'">'+r.confidence+'%</span>'}
+      return '<tr class="'+rowClass+'"><td><div class="att-name"><img src="'+r.photo+'" alt=""><span>'+escapeHtml(r.name)+'</span></div></td><td>'+statusHtml+'</td><td>'+confHtml+'</td><td>'+escapeHtml(r.group)+'</td></tr>';
+    }).join('');
+    resultSection.style.display='block';
     currentResults={group:selectedAttendanceGroup,rows,stats:{presentCount,absentCount,unknownCount:totalUnknown},photoCount:selectedPhotos.length,date:new Date().toISOString()};
-    renderAttendanceTable();
-    showStatus('mainStatus','Готово! Присутствуют: '+presentCount+' из '+groupStudents.length+' (по '+selectedPhotos.length+' фото)','success',6000);
+    showStatus('mainStatus','Готово! Присутствуют: '+presentCount+' из '+allGroupStudents.length+' (по '+selectedPhotos.length+' фото)','success',6000);
     saveCurrentToHistory();
   }catch(err){console.error(err);showStatus('mainStatus','Ошибка: '+err.message,'error',0)}
   finally{loadingOverlay.style.display='none'}
 }
 
-// Универсальная функция рендера таблицы (используется из фото и live)
-function renderAttendanceTable(){
-  if(!currentResults) return;
-  const {rows, stats, group} = currentResults;
-  document.getElementById('statPresent').textContent = stats.presentCount;
-  document.getElementById('statAbsent').textContent = stats.absentCount;
-  document.getElementById('statUnknown').textContent = stats.unknownCount || 0;
-  document.getElementById('resultGroupName').textContent = 'Группа: ' + group + ' · Всего: ' + rows.length + (currentResults.isLive ? ' · 🎥 Live' : '');
-  document.getElementById('attendanceBody').innerHTML = rows.map(r => {
-    const rowClass = r.present ? 'row-present' : 'row-absent';
-    const statusHtml = r.present ? '<span class="att-status present">✓ Присутствует</span>' : '<span class="att-status absent">✗ Отсутствует</span>';
-    let confHtml = '—';
-    if(r.present && r.confidence != null){
-      const cls = r.confidence >= 80 ? 'high' : (r.confidence >= 60 ? 'medium' : 'low');
-      confHtml = '<span class="att-confidence ' + cls + '">' + r.confidence + '%</span>';
-    }
-    return '<tr class="' + rowClass + '"><td><div class="att-name"><img src="' + r.photo + '" alt=""><span>' + escapeHtml(r.name) + '</span></div></td><td>' + statusHtml + '</td><td>' + confHtml + '</td><td>' + escapeHtml(r.group) + '</td></tr>';
-  }).join('');
-  resultSection.style.display = 'block';
-}
-
 function saveCurrentToHistory(){
   if(!currentResults)return;
   const history=getHistory();
-  history.unshift({id:Date.now(),date:currentResults.date,group:currentResults.group,total:currentResults.rows.length,present:currentResults.stats.presentCount,absent:currentResults.stats.absentCount,unknown:currentResults.stats.unknownCount,photoCount:currentResults.photoCount||1,rows:currentResults.rows,isLive:currentResults.isLive||false});
+  history.unshift({id:Date.now(),date:currentResults.date,group:currentResults.group,total:currentResults.rows.length,present:currentResults.stats.presentCount,absent:currentResults.stats.absentCount,unknown:currentResults.stats.unknownCount,photoCount:currentResults.photoCount||1,rows:currentResults.rows});
   if(history.length>50)history.length=50;
   saveHistory(history);renderHistory();renderStats();
 }
@@ -1271,11 +966,10 @@ function renderHistory(){
   list.innerHTML=history.map(h=>{
     const d=new Date(h.date);
     const dateStr=d.toLocaleDateString('ru-RU')+' '+d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});
-    const liveBadge = h.isLive ? ' <span style="background:rgba(244,63,94,.2);color:var(--danger);padding:.1rem .4rem;border-radius:4px;font-size:.65rem;font-weight:700">LIVE</span>' : '';
     return '<div class="history-item" onclick="downloadHistory('+h.id+')" title="Нажмите, чтобы скачать Excel">'+
-      '<div class="history-date">'+dateStr+liveBadge+'</div>'+
+      '<div class="history-date">'+dateStr+'</div>'+
       '<div class="history-group">'+escapeHtml(h.group)+'</div>'+
-      '<div class="history-stats"><b>'+h.present+'</b>/'+h.total+' присутн. <span class="hs-abs">('+h.absent+' отсутств.)</span>'+(h.photoCount&&h.photoCount>1&&!h.isLive?' · '+h.photoCount+' фото':'')+'</div>'+
+      '<div class="history-stats"><b>'+h.present+'</b>/'+h.total+' присутн. <span class="hs-abs">('+h.absent+' отсутств.)</span>'+(h.photoCount&&h.photoCount>1?' · '+h.photoCount+' фото':'')+'</div>'+
       '<button class="history-del" onclick="event.stopPropagation();deleteHistory('+h.id+')" title="Удалить">'+
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 18L18 6M6 6l12 12"/></svg>'+
       '</button></div>';
@@ -1383,7 +1077,6 @@ window.downloadHistory=(id)=>{
   csv+='Группа;'+record.group+'\n';
   csv+='Дата;'+dateStr+'\n';
   csv+='Время;'+timeStr+'\n';
-  csv+='Тип;'+(record.isLive?'Live-камера':'Фото')+'\n';
   csv+='Всего студентов;'+record.total+'\n';
   csv+='Присутствуют;'+record.present+'\n';
   csv+='Отсутствуют;'+record.absent+'\n';
@@ -1391,7 +1084,7 @@ window.downloadHistory=(id)=>{
   csv+='Проанализировано фото;'+(record.photoCount||1)+'\n\n';
   csv+='ФИО;Статус;Точность;Группа\n';
   record.rows.forEach(r=>{
-    const status=r.present?'Присутствует':'Отсутствует';
+    const status=r.noFace?'Без лица':(r.present?'Присутствует':'Отсутствует');
     const conf=r.present&&r.confidence!=null?r.confidence+'%':'—';
     csv+=r.name+';'+status+';'+conf+';'+(r.group||record.group)+'\n';
   });
@@ -1414,30 +1107,61 @@ document.getElementById('exportBtn').addEventListener('click',()=>{
   let csv='\uFEFF';
   csv+='Группа;'+group+'\n';
   csv+='Дата;'+new Date(date).toLocaleString('ru-RU')+'\n';
-  csv+='Тип;'+(currentResults.isLive?'Live-камера':'Фото')+'\n';
   csv+='Фото проанализировано;'+(photoCount||1)+'\n\n';
   csv+='ФИО;Статус;Точность;Группа\n';
-  rows.forEach(r=>{const status=r.present?'Присутствует':'Отсутствует';const conf=r.present&&r.confidence!=null?r.confidence+'%':'—';csv+=r.name+';'+status+';'+conf+';'+r.group+'\n'});
+  rows.forEach(r=>{
+    const status=r.noFace?'Без лица':(r.present?'Присутствует':'Отсутствует');
+    const conf=r.present&&r.confidence!=null?r.confidence+'%':'—';
+    csv+=r.name+';'+status+';'+conf+';'+r.group+'\n';
+  });
   const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);
-  a.download='посещаемость_'+group+'_'+new Date(date).toISOString().slice(0,10)+(currentResults.isLive?'_live':'')+'.csv';
+  a.download='посещаемость_'+group+'_'+new Date(date).toISOString().slice(0,10)+'.csv';
   a.click();URL.revokeObjectURL(a.href);
   showStatus('mainStatus','CSV файл скачан!','success',3000);
 });
 
-// Остановка камеры при закрытии вкладки
-window.addEventListener('beforeunload', stopLive);
-document.addEventListener('visibilitychange', () => {
-  if(document.hidden) stopLive();
+document.getElementById('exportDbBtn').addEventListener('click',()=>{
+  const db=getDB();
+  const history=getHistory();
+  if(db.students.length===0&&db.groups.length===0&&history.length===0){
+    showStatus('backupStatus','База пуста — нечего скачивать','error');
+    return;
+  }
+  const data={version:4,exportedAt:new Date().toISOString(),groups:db.groups,students:db.students,history:history};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  const dateStr=new Date().toISOString().slice(0,10);
+  a.download='faceid_база_'+dateStr+'.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showStatus('backupStatus','✅ Скачано: '+db.groups.length+' групп, '+db.students.length+' студентов, '+history.length+' сессий','success',5000);
 });
 
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js')
-      .then(reg => console.log('✅ SW зарегистрирован:', reg.scope))
-      .catch(err => console.log('ℹ️ SW не зарегистрирован (нормально для file://):', err.message));
-  });
-}
+document.getElementById('importDbInput').addEventListener('change',async(e)=>{
+  const file=e.target.files[0];
+  e.target.value='';
+  if(!file)return;
+  if(!confirm('Загрузить базу из файла? Текущая база будет ЗАМЕНЕНА!'))return;
+  try{
+    const text=await file.text();
+    const data=JSON.parse(text);
+    if(!data.groups||!Array.isArray(data.groups))throw new Error('Нет поля "groups"');
+    if(!data.students||!Array.isArray(data.students))throw new Error('Нет поля "students"');
+    for(const s of data.students){
+      if(!s.name||!s.group||!Array.isArray(s.descriptors))throw new Error('Некорректный студент: '+(s.name||'без имени'));
+    }
+    saveDB({groups:data.groups,students:data.students});
+    if(data.history&&Array.isArray(data.history))saveHistory(data.history);
+    selectedUploadGroup=null;selectedAttendanceGroup=null;
+    renderAdminGroups();renderStudents();renderAttendanceGroups();renderHistory();renderStats();
+    showStatus('backupStatus','✅ База загружена: '+data.groups.length+' групп, '+data.students.length+' студентов','success',5000);
+  }catch(err){
+    console.error(err);
+    showStatus('backupStatus','❌ Ошибка: '+err.message,'error',6000);
+  }
+});
 
 window.addEventListener('DOMContentLoaded',()=>{
   console.log('🚀 FaceID стартует...');
