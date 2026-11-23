@@ -12,7 +12,6 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="format-detection" content="telephone=no">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjM4IiBmaWxsPSIjOGI1Y2Y2Ii8+PGNpcmNsZSBjeD0iOTYiIGN5PSI5NiIgcj0iNTYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSI4Ii8+PGNpcmNsZSBjeD0iNzYiIGN5PSI4OCIgcj0iNyIgZmlsbD0iI2ZmZiIvPjxjaXJjbGUgY3g9IjExNiIgY3k9Ijg4IiByPSI3IiBmaWxsPSIjZmZmIi8+PHBhdGggZD0iTTcyIDEyMGMyMCAyMCA1MCAyMCA3MCAwIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iOCIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PC9zdmc+">
-<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjM4IiBmaWxsPSIjOGI1Y2Y2Ii8+PGNpcmNsZSBjeD0iOTYiIGN5PSI5NiIgcj0iNTYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSI4Ii8+PGNpcmNsZSBjeD0iNzYiIGN5PSI4OCIgcj0iNyIgZmlsbD0iI2ZmZiIvPjxjaXJjbGUgY3g9IjExNiIgY3k9Ijg4IiByPSI3IiBmaWxsPSIjZmZmIi8+PHBhdGggZD0iTTcyIDEyMGMyMCAyMCA1MCAyMCA3MCAwIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iOCIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PC9zdmc+">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -112,9 +111,12 @@ h1{font-family:var(--font-display);font-size:clamp(1.8rem,4vw,2.6rem);font-weigh
 .face-item img{width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);margin-bottom:.4rem}
 .face-item .fi-name{font-weight:600;font-size:.8rem;margin-bottom:.1rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
 .face-item .fi-group{font-size:.68rem;color:var(--accent);font-weight:600;margin-bottom:.1rem}
-.face-item .fi-delete{position:absolute;top:4px;right:4px;background:rgba(244,63,94,.15);border:1px solid var(--danger);color:var(--danger);width:22px;height:22px;border-radius:6px;cursor:pointer;display:grid;place-items:center;padding:0}
-.face-item .fi-delete:hover{background:var(--danger);color:#fff}
-.face-item .fi-delete svg{width:12px;height:12px}
+.face-actions{position:absolute;top:4px;right:4px;display:flex;gap:4px}
+.face-action-btn{background:rgba(255,255,255,0.1);border:none;color:var(--text);width:22px;height:22px;border-radius:6px;cursor:pointer;display:grid;place-items:center;padding:0;transition:all .2s}
+.face-action-btn.edit:hover{background:var(--primary);color:#fff}
+.face-action-btn.del:hover{background:var(--danger);color:#fff}
+.face-action-btn svg{width:12px;height:12px}
+
 .empty-state{text-align:center;padding:2.5rem 1rem;color:var(--text-dim)}
 .empty-state.grid{grid-column:1/-1}
 .empty-icon{font-size:3rem;margin-bottom:.75rem;opacity:.5}
@@ -124,11 +126,8 @@ h1{font-family:var(--font-display);font-size:clamp(1.8rem,4vw,2.6rem);font-weigh
 .btn svg{width:18px;height:18px;flex-shrink:0}
 .btn:disabled{opacity:.35;cursor:not-allowed}
 .btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-2));box-shadow:0 4px 20px var(--primary-glow)}
-.btn-primary:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 30px var(--primary-glow)}
 .btn-success{background:linear-gradient(135deg,var(--success),#059669);box-shadow:0 4px 20px var(--success-glow)}
-.btn-success:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 30px var(--success-glow)}
 .btn-danger{background:linear-gradient(135deg,var(--danger),#dc2626);box-shadow:0 4px 20px var(--danger-glow)}
-.btn-danger:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 30px var(--danger-glow)}
 .btn.full-width{width:100%}
 .step-label{display:flex;align-items:center;gap:.6rem;font-size:.9rem;font-weight:600;color:var(--text-muted);margin-bottom:.75rem}
 .step-num{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;font-size:.8rem;font-weight:700;flex-shrink:0}
@@ -194,8 +193,145 @@ h1{font-family:var(--font-display);font-size:clamp(1.8rem,4vw,2.6rem);font-weigh
 .history-del{background:transparent;border:1px solid var(--danger);color:var(--danger);width:28px;height:28px;border-radius:8px;cursor:pointer;display:grid;place-items:center;transition:all .2s;padding:0;flex-shrink:0}
 .history-del:hover{background:var(--danger);color:#fff}
 .history-del svg{width:14px;height:14px}
-.mobile-nav{display:none}
+.stats-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-bottom:1.25rem}
+.stats-summary .stat-card{padding:1rem .5rem}
+.stats-summary .stat-value{font-size:1.6rem}
+.stats-summary .stat-label{font-size:.7rem}
+.stats-summary .stat-card.info .stat-value{background:linear-gradient(135deg,var(--accent),var(--primary));-webkit-background-clip:text;background-clip:text}
+.stats-summary .stat-card.warn .stat-value{background:linear-gradient(135deg,var(--warning),#dc2626);-webkit-background-clip:text;background-clip:text}
+.stats-summary .stat-card.best .stat-value{font-size:1rem;line-height:1.3;padding:.3rem 0}
+.stats-summary .stat-card.best .stat-label{font-size:.68rem}
+.mini-chart{display:flex;align-items:flex-end;gap:.4rem;height:120px;padding:.75rem 1rem;background:var(--surface-2);border:1px solid var(--border);border-radius:14px;margin-bottom:1.25rem;overflow-x:auto}
+.mini-chart::-webkit-scrollbar{height:4px}
+.mini-chart::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:2px}
+.mc-bar{flex:1;min-width:32px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:.25rem;height:100%;cursor:pointer;transition:transform .2s}
+.mc-bar:hover{transform:translateY(-3px)}
+.mc-bar-fill{width:100%;background:linear-gradient(180deg,var(--primary),var(--primary-2));border-radius:6px 6px 0 0;min-height:4px;position:relative;transition:all .3s}
+.mc-bar-fill.high{background:linear-gradient(180deg,var(--success),#059669)}
+.mc-bar-fill.medium{background:linear-gradient(180deg,var(--warning),#d97706)}
+.mc-bar-fill.low{background:linear-gradient(180deg,var(--danger),#b91c1c)}
+.mc-bar-pct{font-size:.65rem;font-weight:700;color:var(--text-muted)}
+.mc-bar-date{font-size:.6rem;color:var(--text-dim);white-space:nowrap;transform:rotate(-45deg);margin-top:.35rem}
+.stats-table{width:100%;border-collapse:separate;border-spacing:0;font-size:.85rem;border-radius:12px;overflow:hidden;border:1px solid var(--border-strong)}
+.stats-table thead{background:linear-gradient(135deg,rgba(139,92,246,.2),rgba(99,102,241,.2))}
+.stats-table th{padding:.65rem .5rem;text-align:left;font-weight:700;font-size:.72rem;text-transform:uppercase;color:var(--text-muted);border-bottom:1px solid var(--border-strong)}
+.stats-table td{padding:.55rem .5rem;border-bottom:1px solid var(--border);vertical-align:middle}
+.stats-table tr:last-child td{border-bottom:none}
+.stats-table tbody tr:hover{background:rgba(139,92,246,.05)}
+.stat-percent{display:inline-block;padding:.15rem .5rem;border-radius:6px;font-size:.75rem;font-weight:700}
+.stat-percent.pct-high{background:rgba(16,185,129,.15);color:var(--success)}
+.stat-percent.pct-medium{background:rgba(245,158,11,.15);color:var(--warning)}
+.stat-percent.pct-low{background:rgba(244,63,94,.15);color:var(--danger)}
+.stat-rank{font-weight:700;color:var(--text-dim);font-size:.8rem;min-width:24px;display:inline-block}
+.stat-rank.top1{color:#fbbf24}
+.stat-rank.top2{color:#94a3b8}
+.stat-rank.top3{color:#cd7f32}
+
+/* ============ LIVE VIDEO MODE ============ */
+.live-stage{
+  position:relative;
+  width:100%;
+  background:#000;
+  border-radius:16px;
+  overflow:hidden;
+  aspect-ratio:16/9;
+  margin-bottom:1rem;
+  border:1px solid var(--border-strong);
+}
+.live-stage video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  transform:scaleX(-1); /* зеркало */
+}
+.live-stage canvas{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  transform:scaleX(-1); /* зеркало */
+}
+.live-overlay{
+  position:absolute;
+  top:.75rem;
+  left:.75rem;
+  right:.75rem;
+  display:flex;
+  justify-content:space-between;
+  pointer-events:none;
+  z-index:5;
+  gap:.5rem;
+}
+.live-badge{
+  background:rgba(244,63,94,0.92);
+  color:#fff;
+  padding:.45rem .9rem;
+  border-radius:10px;
+  font-weight:700;
+  font-size:.82rem;
+  display:flex;
+  align-items:center;
+  gap:.45rem;
+  backdrop-filter:blur(8px);
+  box-shadow:0 4px 12px rgba(0,0,0,.3);
+  letter-spacing:.05em;
+}
+.live-badge .pulse{
+  width:8px;
+  height:8px;
+  background:#fff;
+  border-radius:50%;
+  animation:pulse 1.4s ease-in-out infinite;
+  box-shadow:0 0 8px rgba(255,255,255,.6);
+}
+@keyframes pulse{
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:.3;transform:scale(.8)}
+}
+.live-counter{
+  background:rgba(10,10,15,0.8);
+  backdrop-filter:blur(8px);
+  color:#fff;
+  padding:.45rem .9rem;
+  border-radius:10px;
+  font-weight:600;
+  font-size:.85rem;
+  box-shadow:0 4px 12px rgba(0,0,0,.3);
+  border:1px solid rgba(255,255,255,.1);
+}
+.live-counter b{color:var(--success);font-weight:800;font-size:1rem}
+.live-controls{
+  display:flex;
+  gap:.5rem;
+  flex-wrap:wrap;
+}
+.live-controls .btn{flex:1;min-width:140px}
+.live-tip{
+  background:rgba(245,158,11,.08);
+  border:1px solid rgba(245,158,11,.3);
+  color:var(--warning);
+  padding:.65rem .9rem;
+  border-radius:10px;
+  font-size:.82rem;
+  margin-bottom:1rem;
+  display:flex;
+  gap:.5rem;
+  align-items:flex-start;
+  line-height:1.5;
+}
+.live-tip svg{flex-shrink:0;margin-top:2px}
+
+@media(max-width:900px){.stats-summary{grid-template-columns:1fr 1fr}}
 @media(max-width:768px){
+  .stats-summary{grid-template-columns:1fr 1fr;gap:.5rem}
+  .stats-summary .stat-value{font-size:1.3rem}
+  .mini-chart{height:100px}
+  .mc-bar-date{display:none}
+  .stats-table{font-size:.75rem}
+  .stats-table th,.stats-table td{padding:.45rem .3rem}
   .mobile-nav{display:flex;position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,15,.95);backdrop-filter:blur(20px);border-top:1px solid var(--border-strong);z-index:200;padding:.5rem .5rem calc(.5rem + env(safe-area-inset-bottom, 0));box-shadow:0 -10px 30px rgba(0,0,0,.4)}
   .mobile-nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:.25rem;padding:.65rem .5rem;background:none;border:none;color:var(--text-muted);font-family:inherit;font-size:.7rem;font-weight:600;cursor:pointer;border-radius:12px;transition:all .2s}
   .mobile-nav button svg{width:22px;height:22px}
@@ -235,7 +371,6 @@ h1{font-family:var(--font-display);font-size:clamp(1.8rem,4vw,2.6rem);font-weigh
   .face-item img{width:52px;height:52px}
   .face-item .fi-name{font-size:.72rem}
   .face-item .fi-group{font-size:.62rem}
-  .face-item .fi-delete{width:20px;height:20px;top:3px;right:3px}
   .photo-previews{grid-template-columns:repeat(auto-fill,minmax(75px,1fr));gap:.5rem}
   .photo-counter{font-size:.75rem}
   .history-item{padding:.7rem .75rem;gap:.6rem;flex-wrap:wrap}
@@ -250,6 +385,12 @@ h1{font-family:var(--font-display);font-size:clamp(1.8rem,4vw,2.6rem);font-weigh
   .photo-stage .overlay-wrap img{max-height:400px}
   .loading-overlay p{font-size:.85rem}
   .spinner{width:36px;height:36px}
+  .live-stage{aspect-ratio:4/3}
+  .live-badge{font-size:.72rem;padding:.35rem .7rem}
+  .live-counter{font-size:.78rem;padding:.35rem .7rem}
+  .live-counter b{font-size:.9rem}
+  .live-controls .btn{min-width:110px;padding:.75rem 1rem;font-size:.82rem}
+  .live-tip{font-size:.75rem;padding:.55rem .75rem}
 }
 @media(max-width:380px){
   .stats-grid{grid-template-columns:1fr 1fr}
@@ -284,17 +425,64 @@ h1{font-family:var(--font-display);font-size:clamp(1.8rem,4vw,2.6rem);font-weigh
 </nav>
 
 <main class="container">
+  <!-- ================= ATTENDANCE TAB ================= -->
   <section id="tab-attendance" class="page active">
     <header class="page-header">
       <h1>Отметка <span class="gradient-text">посещаемости</span></h1>
-      <p class="subtitle">Выберите группу, загрузите до 10 общих фото — система отметит присутствующих</p>
+      <p class="subtitle">Выберите группу и используйте фото, живую камеру или загрузите до 10 общих фото</p>
     </header>
     <div class="glass-card">
       <div class="step-label"><span class="step-num">1</span> Выберите группу</div>
       <div class="group-chips" id="groupChips"><p style="color:var(--text-dim);font-size:.85rem">Загрузка групп…</p></div>
     </div>
+
+    <!-- ============ LIVE VIDEO MODE ============ -->
+    <div class="glass-card" id="liveCard" style="display:none">
+      <div class="card-head">
+        <div class="card-icon accent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7l-7 5 7 5V7zM14 5H3a2 2 0 00-2 2v10a2 2 0 002 2h11a2 2 0 002-2V7a2 2 0 00-2-2z"/></svg></div>
+        <div style="flex:1"><h2>🎥 Режим реального времени</h2><p class="card-desc">Камера с автоматическим распознаванием</p></div>
+      </div>
+      <div class="live-tip">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <div>Направьте камеру на студентов. Система будет автоматически отмечать присутствующих. Нажмите <b>«Завершить сессию»</b>, когда закончите.</div>
+      </div>
+      <div class="live-stage" id="liveStage" style="display:none">
+        <video id="liveVideo" autoplay muted playsinline></video>
+        <canvas id="liveCanvas"></canvas>
+        <div class="live-overlay">
+          <div class="live-badge"><span class="pulse"></span> LIVE</div>
+          <div class="live-counter">Отмечено: <b id="liveCount">0</b> / <span id="liveTotal">0</span></div>
+        </div>
+      </div>
+      <div class="live-controls">
+        <button class="btn btn-primary" id="startLiveBtn" onclick="startLive()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7l-7 5 7 5V7zM14 5H3a2 2 0 00-2 2v10a2 2 0 002 2h11a2 2 0 002-2V7a2 2 0 00-2-2z"/></svg>
+          Запустить камеру
+        </button>
+        <button class="btn btn-danger" onclick="stopLive()" id="stopLiveBtn" style="display:none">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="12" height="12"/></svg>
+          Остановить
+        </button>
+        <button class="btn btn-success" onclick="finishLiveSession()" id="finishLiveBtn" style="display:none">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
+          Завершить сессию
+        </button>
+      </div>
+      <div class="status-msg" id="liveStatus"></div>
+    </div>
+
     <div class="glass-card">
-      <div class="step-label"><span class="step-num">2</span> Загрузите фото группы (до 10)</div>
+      <div class="step-label"><span class="step-num">2</span> Или загрузите фото группы (до 10)</div>
+      
+      <!-- Кнопка камеры для посещаемости -->
+      <div style="display:flex; gap:10px; margin-bottom:1rem;">
+        <button class="btn btn-primary full-width" id="cameraBtnAtt" style="display:none" onclick="triggerCamera('attendance')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          Снять с камеры
+        </button>
+        <input type="file" id="cameraInputAtt" accept="image/*" capture="environment" hidden>
+      </div>
+
       <label for="groupPhotoInput" class="dropzone disabled" id="groupPhotoDropzone">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14M14 8h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
         <span class="dz-title">Выберите до 10 фото</span>
@@ -335,8 +523,18 @@ h1{font-family:var(--font-display);font-size:clamp(1.8rem,4vw,2.6rem);font-weigh
       </div>
       <div class="history-list" id="historyList"><div class="empty-state"><div class="empty-icon">📋</div><div class="empty-title">История пуста</div><div class="empty-desc">Отметьте посещаемость, чтобы сохранить сессию</div></div></div>
     </div>
+    <div class="glass-card">
+      <div class="card-head">
+        <div class="card-icon accent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div>
+        <div style="flex:1"><h2>Сводная статистика</h2><p class="card-desc" id="statsGroupName">Выберите группу для отображения</p></div>
+      </div>
+      <div id="statsContent">
+        <div class="empty-state"><div class="empty-icon">📊</div><div class="empty-title">Нет данных</div><div class="empty-desc">Проведите хотя бы одну сессию, чтобы увидеть статистику</div></div>
+      </div>
+    </div>
   </section>
 
+  <!-- ================= ADMIN TAB ================= -->
   <section id="tab-admin" class="page">
     <header class="page-header">
       <h1>Группы <span class="gradient-text">и студенты</span></h1>
@@ -376,6 +574,15 @@ h1{font-family:var(--font-display);font-size:clamp(1.8rem,4vw,2.6rem);font-weigh
       </div>
       <div class="group-list" id="groupSelector" style="margin-bottom:1rem"></div>
       <div class="bulk-info"><div>💡</div><div><strong>Максимальная точность:</strong> загружайте по 2–3 разных фото одного студента. Назовите их <code>Иванов_1.jpg</code>, <code>Иванов_2.jpg</code> — дескрипторы объединятся.</div></div>
+      
+      <div style="display:flex; gap:10px; margin-bottom:1rem;">
+        <button class="btn btn-primary full-width" id="cameraBtnAdmin" style="display:none" onclick="triggerCamera('admin')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          Сфотографировать студента
+        </button>
+        <input type="file" id="cameraInputAdmin" accept="image/*" capture="environment" hidden>
+      </div>
+
       <label for="bulkPhotoInput" class="dropzone disabled" id="bulkDropzone">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 16a4 4 0 01-.88-7.9A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
         <span class="dz-title">Нажмите или перетащите файлы</span>
@@ -388,6 +595,30 @@ h1{font-family:var(--font-display);font-size:clamp(1.8rem,4vw,2.6rem);font-weigh
     </div>
   </section>
 </main>
+
+<!-- ================= EDIT MODAL ================= -->
+<div id="editModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); backdrop-filter:blur(10px); z-index:1000; align-items:center; justify-content:center; padding:1rem;">
+  <div class="glass-card" style="width:100%; max-width:400px; margin:0;">
+    <div class="card-head">
+      <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+      <div style="flex:1"><h2>Редактировать студента</h2></div>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:1rem;">
+      <div>
+        <label style="font-size:.85rem; color:var(--text-muted); margin-bottom:.25rem; display:block;">ФИО Студента</label>
+        <input type="text" id="editNameInput" style="width:100%; padding:.7rem; background:var(--surface-2); border:1px solid var(--border-strong); border-radius:12px; color:var(--text); font-family:inherit;">
+      </div>
+      <div>
+        <label style="font-size:.85rem; color:var(--text-muted); margin-bottom:.25rem; display:block;">Группа</label>
+        <select id="editGroupSelect" style="width:100%; padding:.7rem; background:var(--surface-2); border:1px solid var(--border-strong); border-radius:12px; color:var(--text); font-family:inherit;"></select>
+      </div>
+      <div style="display:flex; gap:.5rem; margin-top:1rem;">
+        <button class="btn btn-primary" style="flex:1" onclick="saveStudentEdit()">Сохранить</button>
+        <button class="btn btn-danger" style="flex:1; background:var(--surface-2); box-shadow:none;" onclick="closeEditModal()">Отмена</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <nav class="mobile-nav">
   <button class="active" data-tab="attendance" onclick="switchTab('attendance')">
@@ -406,6 +637,16 @@ const MODEL_URL='https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@maste
 const DB_KEY='faceid_db_v3', HISTORY_KEY='faceid_history_v3', MATCH_THRESHOLD=0.5, MAX_PHOTOS=10;
 let modelsReady=false, modelsLoading=false, selectedUploadGroup=null, selectedAttendanceGroup=null, currentResults=null;
 let selectedPhotos=[];
+let editingStudentId = null;
+
+// --- LIVE VIDEO STATE ---
+let liveRunning = false;
+let liveDetected = new Set();
+let liveConfidences = new Map();
+let liveStream = null;
+let liveMatcher = null;
+let lastLiveFrame = 0;
+const LIVE_FRAME_INTERVAL = 200; // ~5 FPS для производительности
 
 function getDB(){try{return JSON.parse(localStorage.getItem(DB_KEY)||'{"groups":[],"students":[]}')}catch{return{groups:[],students:[]}}}
 function saveDB(db){localStorage.setItem(DB_KEY,JSON.stringify(db))}
@@ -423,6 +664,7 @@ async function loadModels(){
     console.log('⏳ Загрузка моделей...');
     await Promise.all([
       faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
+      faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
       faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
       faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL)
     ]);
@@ -436,6 +678,7 @@ async function loadModels(){
 }
 
 function switchTab(tab){
+  stopLive(); // останавливаем камеру при переключении
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('tab-'+tab).classList.add('active');
   document.querySelectorAll('.nav-tab, .mobile-nav button').forEach(b=>{
@@ -443,18 +686,270 @@ function switchTab(tab){
   });
   window.scrollTo({top:0,behavior:'smooth'});
   if(tab==='admin'){renderAdminGroups();renderStudents()}
-  if(tab==='attendance'){renderAttendanceGroups();renderHistory()}
+  if(tab==='attendance'){renderAttendanceGroups();renderHistory();renderStats()}
 }
 
+// --- CAMERA LOGIC ---
+window.triggerCamera = (mode) => {
+  const inputId = mode === 'admin' ? 'cameraInputAdmin' : 'cameraInputAtt';
+  document.getElementById(inputId).click();
+};
+
+document.getElementById('cameraInputAdmin').addEventListener('change', async (e) => {
+  if(e.target.files && e.target.files[0]) {
+    processFiles([e.target.files[0]]);
+    e.target.value = '';
+  }
+});
+
+document.getElementById('cameraInputAtt').addEventListener('change', async (e) => {
+  if(e.target.files && e.target.files[0]) {
+    addPhotos([e.target.files[0]]);
+    e.target.value = '';
+  }
+});
+
+// --- LIVE VIDEO FUNCTIONS ---
+async function startLive(){
+  if(!selectedAttendanceGroup){showStatus('liveStatus','Сначала выберите группу!','error');return}
+  if(!modelsReady){showStatus('liveStatus','Нейросеть загружается…','info');await loadModels();if(!modelsReady)return}
+
+  const db=getDB();
+  const groupStudents=db.students.filter(s=>s.group===selectedAttendanceGroup);
+  if(groupStudents.length===0){
+    showStatus('liveStatus','В группе «'+selectedAttendanceGroup+'» нет студентов. Загрузите их в админ-панели.','error',0);
+    return;
+  }
+
+  try{
+    showStatus('liveStatus','📷 Запрашиваем доступ к камере…','info');
+    liveStream = await navigator.mediaDevices.getUserMedia({
+      video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: 'user' },
+      audio: false
+    });
+
+    const video = document.getElementById('liveVideo');
+    video.srcObject = liveStream;
+    await video.play();
+
+    document.getElementById('liveStage').style.display = 'block';
+    document.getElementById('startLiveBtn').style.display = 'none';
+    document.getElementById('stopLiveBtn').style.display = 'inline-flex';
+    document.getElementById('finishLiveBtn').style.display = 'inline-flex';
+
+    liveDetected = new Set();
+    liveConfidences = new Map();
+    document.getElementById('liveCount').textContent = '0';
+    document.getElementById('liveTotal').textContent = groupStudents.length;
+
+    // Создаём matcher для группы
+    liveMatcher = new faceapi.FaceMatcher(
+      groupStudents.map(s => new faceapi.LabeledFaceDescriptors(
+        s.name,
+        s.descriptors.map(d => new Float32Array(d))
+      )),
+      MATCH_THRESHOLD
+    );
+
+    liveRunning = true;
+    lastLiveFrame = 0;
+    showStatus('liveStatus','🎥 Камера запущена! Отмечайте студентов в реальном времени.','success',4000);
+    requestAnimationFrame(liveLoop);
+  } catch(err){
+    console.error('Ошибка камеры:',err);
+    let msg = '❌ Ошибка доступа к камере: ' + err.message;
+    if(err.name === 'NotAllowedError') msg = '❌ Вы запретили доступ к камере. Разрешите в настройках браузера.';
+    if(err.name === 'NotFoundError') msg = '❌ Камера не найдена на этом устройстве.';
+    showStatus('liveStatus', msg, 'error', 0);
+  }
+}
+
+async function liveLoop(timestamp){
+  if(!liveRunning) return;
+
+  // Пропускаем кадр, если прошло мало времени (для производительности)
+  if(timestamp - lastLiveFrame < LIVE_FRAME_INTERVAL){
+    requestAnimationFrame(liveLoop);
+    return;
+  }
+  lastLiveFrame = timestamp;
+
+  const video = document.getElementById('liveVideo');
+  const canvas = document.getElementById('liveCanvas');
+
+  if(video.videoWidth === 0 || video.paused || video.ended){
+    requestAnimationFrame(liveLoop);
+    return;
+  }
+
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  try{
+    // Используем TinyFaceDetector - он быстрее и легче
+    const options = new faceapi.TinyFaceDetectorOptions({
+      inputSize: 416,
+      scoreThreshold: 0.5
+    });
+
+    const detections = await faceapi.detectAllFaces(video, options)
+      .withFaceLandmarks()
+      .withFaceDescriptors();
+
+    for(const det of detections){
+      const box = det.detection.box;
+      const match = liveMatcher.findBestMatch(det.descriptor);
+
+      let color = '#f43f5e', label = 'Неизвестный', conf = 0;
+      if(match.label !== 'unknown'){
+        color = '#10b981';
+        label = match.label;
+        conf = Math.round((1 - match.distance) * 100);
+
+        if(!liveDetected.has(label)){
+          liveDetected.add(label);
+          liveConfidences.set(label, conf);
+          document.getElementById('liveCount').textContent = liveDetected.size;
+        } else {
+          const prev = liveConfidences.get(label);
+          if(conf > prev) liveConfidences.set(label, conf);
+        }
+      }
+
+      // Рисуем рамку
+      const lw = Math.max(3, Math.round(canvas.width / 220));
+      ctx.strokeStyle = color;
+      ctx.lineWidth = lw;
+      ctx.shadowColor = color;
+      ctx.shadowBlur = 12;
+      ctx.strokeRect(box.x, box.y, box.width, box.height);
+      ctx.shadowBlur = 0;
+
+      // Углы рамки для стиля
+      const corner = Math.min(box.width, box.height) * 0.2;
+      ctx.lineWidth = lw * 1.5;
+      ctx.beginPath();
+      // верхний левый
+      ctx.moveTo(box.x, box.y + corner);
+      ctx.lineTo(box.x, box.y);
+      ctx.lineTo(box.x + corner, box.y);
+      // верхний правый
+      ctx.moveTo(box.x + box.width - corner, box.y);
+      ctx.lineTo(box.x + box.width, box.y);
+      ctx.lineTo(box.x + box.width, box.y + corner);
+      // нижний правый
+      ctx.moveTo(box.x + box.width, box.y + box.height - corner);
+      ctx.lineTo(box.x + box.width, box.y + box.height);
+      ctx.lineTo(box.x + box.width - corner, box.y + box.height);
+      // нижний левый
+      ctx.moveTo(box.x + corner, box.y + box.height);
+      ctx.lineTo(box.x, box.y + box.height);
+      ctx.lineTo(box.x, box.y + box.height - corner);
+      ctx.stroke();
+
+      // Плашка с именем
+      const fontSize = Math.max(16, Math.round(canvas.width / 40));
+      ctx.font = `700 ${fontSize}px Inter, sans-serif`;
+      const tw = ctx.measureText(label).width;
+      const pad = fontSize * 0.4;
+      const lh = fontSize + pad * 2;
+      let lx = box.x, ly = box.y - lh - 6;
+      if(ly < 4) ly = box.y + box.height + 6;
+      if(lx + tw + pad * 2 > canvas.width) lx = canvas.width - tw - pad * 2 - 4;
+      if(lx < 4) lx = 4;
+
+      ctx.fillStyle = color;
+      ctx.fillRect(lx, ly, tw + pad * 2, lh);
+      ctx.fillStyle = '#fff';
+      ctx.textBaseline = 'top';
+      ctx.fillText(label, lx + pad, ly + pad);
+    }
+  } catch(err){
+    console.error('Live loop error:', err);
+  }
+
+  requestAnimationFrame(liveLoop);
+}
+
+function stopLive(){
+  liveRunning = false;
+  if(liveStream){
+    liveStream.getTracks().forEach(t => t.stop());
+    liveStream = null;
+  }
+  const video = document.getElementById('liveVideo');
+  if(video) video.srcObject = null;
+  
+  document.getElementById('liveStage').style.display = 'none';
+  document.getElementById('startLiveBtn').style.display = 'inline-flex';
+  document.getElementById('stopLiveBtn').style.display = 'none';
+  document.getElementById('finishLiveBtn').style.display = 'none';
+}
+
+function finishLiveSession(){
+  if(liveDetected.size === 0){
+    if(!confirm('Никто не отмечен. Завершить сессию?')) return;
+  } else {
+    if(!confirm(`Завершить сессию? Отмечено студентов: ${liveDetected.size}`)) return;
+  }
+
+  const db = getDB();
+  const groupStudents = db.students.filter(s => s.group === selectedAttendanceGroup);
+
+  const rows = groupStudents.map(s => {
+    const isPresent = liveDetected.has(s.name);
+    return {
+      name: s.name,
+      group: s.group,
+      photo: s.photo,
+      present: isPresent,
+      confidence: isPresent ? liveConfidences.get(s.name) : null
+    };
+  });
+  rows.sort((a,b) => (b.present - a.present) || a.name.localeCompare(b.name));
+
+  const presentCount = liveDetected.size;
+  const absentCount = groupStudents.length - presentCount;
+
+  currentResults = {
+    group: selectedAttendanceGroup,
+    rows,
+    stats: { presentCount, absentCount, unknownCount: 0 },
+    photoCount: 1,
+    date: new Date().toISOString(),
+    isLive: true
+  };
+
+  renderAttendanceTable();
+  saveCurrentToHistory();
+  stopLive();
+  showStatus('mainStatus', '✅ Live-сессия завершена! Присутствуют: ' + presentCount + ' из ' + groupStudents.length, 'success', 6000);
+  document.getElementById('resultSection').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+// --- GROUP & STUDENT MANAGEMENT ---
 function renderAdminGroups(){
   const db=getDB();
   const list=document.getElementById('groupList'),selector=document.getElementById('groupSelector');
   document.getElementById('groupCountBadge').textContent=db.groups.length;
+  
+  const camBtnAtt = document.getElementById('cameraBtnAtt');
+  const camBtnAdmin = document.getElementById('cameraBtnAdmin');
+  
   if(db.groups.length===0){
     list.innerHTML='<p style="color:var(--text-dim);font-size:.85rem">Групп пока нет. Создайте первую.</p>';
     selector.innerHTML='<p style="color:var(--text-dim);font-size:.85rem">Сначала создайте группу</p>';
-    document.getElementById('bulkDropzone').classList.add('disabled');return;
+    document.getElementById('bulkDropzone').classList.add('disabled');
+    if(camBtnAtt) camBtnAtt.style.display = 'none';
+    if(camBtnAdmin) camBtnAdmin.style.display = 'none';
+    return;
   }
+  
+  if(camBtnAtt) camBtnAtt.style.display = selectedAttendanceGroup ? 'flex' : 'none';
+  if(camBtnAdmin) camBtnAdmin.style.display = selectedUploadGroup ? 'flex' : 'none';
+
   list.innerHTML=db.groups.map(g=>{
     const count=db.students.filter(s=>s.group===g).length;
     return '<div class="group-tag">'+escapeHtml(g)+'<span class="gt-count">'+count+'</span><button class="gt-del" onclick="deleteGroup(\''+escapeHtml(g).replace(/'/g,"\\'")+'\')" title="Удалить"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 18L18 6M6 6l12 12"/></svg></button></div>';
@@ -468,7 +963,7 @@ window.deleteGroup=g=>{
   if(!confirm('Удалить группу «'+g+'»? Студенты этой группы тоже удалятся.'))return;
   const db=getDB();db.groups=db.groups.filter(x=>x!==g);db.students=db.students.filter(s=>s.group!==g);
   saveDB(db);if(selectedUploadGroup===g)selectedUploadGroup=null;if(selectedAttendanceGroup===g)selectedAttendanceGroup=null;
-  renderAdminGroups();renderStudents();
+  renderAdminGroups();renderStudents();renderAttendanceGroups();renderStats();
 };
 document.getElementById('addGroupBtn').addEventListener('click',()=>{
   const input=document.getElementById('newGroupInput');const name=input.value.trim();if(!name)return;
@@ -487,19 +982,74 @@ function renderStudents(){
   }
   list.innerHTML=filtered.map(s=>{
     const dc=s.descriptors?s.descriptors.length:1;
-    return '<div class="face-item"><button class="fi-delete" onclick="deleteStudent('+s.id+')" title="Удалить"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 18L18 6M6 6l12 12"/></svg></button><img src="'+s.photo+'" alt="'+escapeHtml(s.name)+'"><div class="fi-name">'+escapeHtml(s.name)+'</div><div class="fi-group">'+escapeHtml(s.group)+(dc>1?' · '+dc+' фото':'')+'</div></div>';
+    return `<div class="face-item">
+      <div class="face-actions">
+        <button class="face-action-btn edit" onclick="openEditModal(${s.id})" title="Редактировать">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+        <button class="face-action-btn del" onclick="deleteStudent(${s.id})" title="Удалить">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <img src="${s.photo}" alt="${escapeHtml(s.name)}">
+      <div class="fi-name">${escapeHtml(s.name)}</div>
+      <div class="fi-group">${escapeHtml(s.group)}${dc>1?' · '+dc+' фото':''}</div>
+    </div>`;
   }).join('');
 }
+
+window.openEditModal = (id) => {
+  const db = getDB();
+  const student = db.students.find(s => s.id === id);
+  if (!student) return;
+  
+  editingStudentId = id;
+  document.getElementById('editNameInput').value = student.name;
+  
+  const select = document.getElementById('editGroupSelect');
+  select.innerHTML = db.groups.map(g => 
+    `<option value="${g}" ${g === student.group ? 'selected' : ''}>${g}</option>`
+  ).join('');
+  
+  document.getElementById('editModal').style.display = 'flex';
+};
+
+window.closeEditModal = () => {
+  document.getElementById('editModal').style.display = 'none';
+  editingStudentId = null;
+};
+
+window.saveStudentEdit = () => {
+  if (!editingStudentId) return;
+  const newName = document.getElementById('editNameInput').value.trim();
+  const newGroup = document.getElementById('editGroupSelect').value;
+  
+  if (!newName) { alert('Имя не может быть пустым'); return; }
+  
+  const db = getDB();
+  const idx = db.students.findIndex(s => s.id === editingStudentId);
+  if (idx !== -1) {
+    db.students[idx].name = newName;
+    db.students[idx].group = newGroup;
+    saveDB(db);
+    renderStudents();
+    renderAdminGroups();
+    renderAttendanceGroups();
+    closeEditModal();
+    showStatus('adminStatus', 'Данные студента обновлены', 'success', 2000);
+  }
+};
+
 window.deleteStudent=id=>{
   if(!confirm('Удалить этого студента?'))return;
   const db=getDB();db.students=db.students.filter(s=>s.id!==id);saveDB(db);
-  renderStudents();renderAdminGroups();showStatus('adminStatus','Студент удалён','success',2000);
+  renderStudents();renderAdminGroups();renderStats();showStatus('adminStatus','Студент удалён','success',2000);
 };
 document.getElementById('searchInput').addEventListener('input',renderStudents);
 document.getElementById('clearAllBtn').addEventListener('click',()=>{
   if(!confirm('Удалить ВСЮ базу (группы + студенты)? Необратимо!'))return;
   localStorage.removeItem(DB_KEY);selectedUploadGroup=null;selectedAttendanceGroup=null;
-  renderAdminGroups();renderStudents();renderAttendanceGroups();showStatus('adminStatus','База очищена','success',2000);
+  renderAdminGroups();renderStudents();renderAttendanceGroups();renderStats();showStatus('adminStatus','База очищена','success',2000);
 });
 
 const bulkInput=document.getElementById('bulkPhotoInput'),bulkQueue=document.getElementById('bulkQueue'),progressBar=document.getElementById('progressBar'),progressFill=document.getElementById('progressFill'),bulkDropzone=document.getElementById('bulkDropzone');
@@ -539,27 +1089,41 @@ async function processFiles(files){
   }
   saveDB(db);
   console.log('💾 База сохранена. Студентов:', db.students.length);
-  renderStudents();renderAdminGroups();renderAttendanceGroups();
+  renderStudents();renderAdminGroups();renderAttendanceGroups();renderStats();
   showStatus('adminStatus','Новых: '+added+' · +дескрипторов: '+appended+' · Ошибок: '+failed,(added+appended)>0?'success':'error',8000);
   setTimeout(()=>{progressBar.style.display='none'},2000);
 }
 
 function renderAttendanceGroups(){
   const db=getDB();const chips=document.getElementById('groupChips');
-  if(db.groups.length===0){chips.innerHTML='<p style="color:var(--text-dim);font-size:.85rem">Групп нет. Создайте в админ-панели →</p>';return}
+  const liveCard = document.getElementById('liveCard');
+  if(db.groups.length===0){
+    chips.innerHTML='<p style="color:var(--text-dim);font-size:.85rem">Групп нет. Создайте в админ-панели →</p>';
+    if(liveCard) liveCard.style.display = 'none';
+    return;
+  }
   chips.innerHTML=db.groups.map(g=>{
     const count=db.students.filter(s=>s.group===g).length;
     return '<button class="group-chip '+(selectedAttendanceGroup===g?'active':'')+'" onclick="selectAttendanceGroup(\''+escapeHtml(g).replace(/'/g,"\\'")+'\')">'+escapeHtml(g)+' <span style="opacity:.7;font-size:.75rem">('+count+')</span></button>';
   }).join('');
 }
 window.selectAttendanceGroup=g=>{
+  stopLive(); // останавливаем live при смене группы
   selectedAttendanceGroup=g;
   selectedPhotos.forEach(p=>URL.revokeObjectURL(p.preview));
   selectedPhotos=[];
   renderPhotoPreviews();
   renderAttendanceGroups();
+  renderStats();
+  
   const dz=document.getElementById('groupPhotoDropzone');dz.classList.remove('disabled');
   dz.querySelector('.dz-hint').textContent='Группа: '+g+' · до '+MAX_PHOTOS+' фото';
+  
+  // Показываем live card и кнопку камеры
+  document.getElementById('liveCard').style.display = 'block';
+  const camBtn = document.getElementById('cameraBtnAtt');
+  if(camBtn) camBtn.style.display = 'flex';
+  
   showStatus('mainStatus','Выбрана группа: '+g,'info',2000);
 };
 
@@ -662,31 +1226,42 @@ async function processAllPhotos(){
     });
     rows.sort((a,b)=>(b.present-a.present)||a.name.localeCompare(b.name));
     const presentCount=allPresentNames.size,absentCount=groupStudents.length-presentCount;
-    document.getElementById('statPresent').textContent=presentCount;
-    document.getElementById('statAbsent').textContent=absentCount;
-    document.getElementById('statUnknown').textContent=totalUnknown;
-    document.getElementById('resultGroupName').textContent='Группа: '+selectedAttendanceGroup+' · Всего: '+groupStudents.length+' · Фото: '+selectedPhotos.length;
-    document.getElementById('attendanceBody').innerHTML=rows.map(r=>{
-      const rowClass=r.present?'row-present':'row-absent';
-      const statusHtml=r.present?'<span class="att-status present">✓ Присутствует</span>':'<span class="att-status absent">✗ Отсутствует</span>';
-      let confHtml='—';
-      if(r.present){const cls=r.confidence>=80?'high':(r.confidence>=60?'medium':'low');confHtml='<span class="att-confidence '+cls+'">'+r.confidence+'%</span>'}
-      return '<tr class="'+rowClass+'"><td><div class="att-name"><img src="'+r.photo+'" alt=""><span>'+escapeHtml(r.name)+'</span></div></td><td>'+statusHtml+'</td><td>'+confHtml+'</td><td>'+escapeHtml(r.group)+'</td></tr>';
-    }).join('');
-    resultSection.style.display='block';
+    
     currentResults={group:selectedAttendanceGroup,rows,stats:{presentCount,absentCount,unknownCount:totalUnknown},photoCount:selectedPhotos.length,date:new Date().toISOString()};
+    renderAttendanceTable();
     showStatus('mainStatus','Готово! Присутствуют: '+presentCount+' из '+groupStudents.length+' (по '+selectedPhotos.length+' фото)','success',6000);
     saveCurrentToHistory();
   }catch(err){console.error(err);showStatus('mainStatus','Ошибка: '+err.message,'error',0)}
   finally{loadingOverlay.style.display='none'}
 }
 
+// Универсальная функция рендера таблицы (используется из фото и live)
+function renderAttendanceTable(){
+  if(!currentResults) return;
+  const {rows, stats, group} = currentResults;
+  document.getElementById('statPresent').textContent = stats.presentCount;
+  document.getElementById('statAbsent').textContent = stats.absentCount;
+  document.getElementById('statUnknown').textContent = stats.unknownCount || 0;
+  document.getElementById('resultGroupName').textContent = 'Группа: ' + group + ' · Всего: ' + rows.length + (currentResults.isLive ? ' · 🎥 Live' : '');
+  document.getElementById('attendanceBody').innerHTML = rows.map(r => {
+    const rowClass = r.present ? 'row-present' : 'row-absent';
+    const statusHtml = r.present ? '<span class="att-status present">✓ Присутствует</span>' : '<span class="att-status absent">✗ Отсутствует</span>';
+    let confHtml = '—';
+    if(r.present && r.confidence != null){
+      const cls = r.confidence >= 80 ? 'high' : (r.confidence >= 60 ? 'medium' : 'low');
+      confHtml = '<span class="att-confidence ' + cls + '">' + r.confidence + '%</span>';
+    }
+    return '<tr class="' + rowClass + '"><td><div class="att-name"><img src="' + r.photo + '" alt=""><span>' + escapeHtml(r.name) + '</span></div></td><td>' + statusHtml + '</td><td>' + confHtml + '</td><td>' + escapeHtml(r.group) + '</td></tr>';
+  }).join('');
+  resultSection.style.display = 'block';
+}
+
 function saveCurrentToHistory(){
   if(!currentResults)return;
   const history=getHistory();
-  history.unshift({id:Date.now(),date:currentResults.date,group:currentResults.group,total:currentResults.rows.length,present:currentResults.stats.presentCount,absent:currentResults.stats.absentCount,unknown:currentResults.stats.unknownCount,photoCount:currentResults.photoCount||1,rows:currentResults.rows});
+  history.unshift({id:Date.now(),date:currentResults.date,group:currentResults.group,total:currentResults.rows.length,present:currentResults.stats.presentCount,absent:currentResults.stats.absentCount,unknown:currentResults.stats.unknownCount,photoCount:currentResults.photoCount||1,rows:currentResults.rows,isLive:currentResults.isLive||false});
   if(history.length>50)history.length=50;
-  saveHistory(history);renderHistory();
+  saveHistory(history);renderHistory();renderStats();
 }
 
 function renderHistory(){
@@ -696,15 +1271,107 @@ function renderHistory(){
   list.innerHTML=history.map(h=>{
     const d=new Date(h.date);
     const dateStr=d.toLocaleDateString('ru-RU')+' '+d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});
+    const liveBadge = h.isLive ? ' <span style="background:rgba(244,63,94,.2);color:var(--danger);padding:.1rem .4rem;border-radius:4px;font-size:.65rem;font-weight:700">LIVE</span>' : '';
     return '<div class="history-item" onclick="downloadHistory('+h.id+')" title="Нажмите, чтобы скачать Excel">'+
-      '<div class="history-date">'+dateStr+'</div>'+
+      '<div class="history-date">'+dateStr+liveBadge+'</div>'+
       '<div class="history-group">'+escapeHtml(h.group)+'</div>'+
-      '<div class="history-stats"><b>'+h.present+'</b>/'+h.total+' присутн. <span class="hs-abs">('+h.absent+' отсутств.)</span>'+(h.photoCount&&h.photoCount>1?' · '+h.photoCount+' фото':'')+'</div>'+
+      '<div class="history-stats"><b>'+h.present+'</b>/'+h.total+' присутн. <span class="hs-abs">('+h.absent+' отсутств.)</span>'+(h.photoCount&&h.photoCount>1&&!h.isLive?' · '+h.photoCount+' фото':'')+'</div>'+
       '<button class="history-del" onclick="event.stopPropagation();deleteHistory('+h.id+')" title="Удалить">'+
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 18L18 6M6 6l12 12"/></svg>'+
       '</button></div>';
   }).join('');
 }
+
+function renderStats(){
+  const history=getHistory();
+  const statsContent=document.getElementById('statsContent');
+  const statsGroupName=document.getElementById('statsGroupName');
+  if(!selectedAttendanceGroup){
+    statsGroupName.textContent='Выберите группу для отображения';
+    statsContent.innerHTML='<div class="empty-state"><div class="empty-icon">📊</div><div class="empty-title">Группа не выбрана</div><div class="empty-desc">Выберите группу выше, чтобы увидеть статистику</div></div>';
+    return;
+  }
+  statsGroupName.textContent='Группа: '+selectedAttendanceGroup;
+  const groupHistory=history.filter(h=>h.group===selectedAttendanceGroup);
+  if(groupHistory.length===0){
+    statsContent.innerHTML='<div class="empty-state"><div class="empty-icon">📊</div><div class="empty-title">Нет данных</div><div class="empty-desc">Проведите хотя бы одну сессию по этой группе</div></div>';
+    return;
+  }
+  const studentStats=new Map();
+  let totalSessions=0,totalPresent=0;
+  for(const session of groupHistory){
+    totalSessions++;
+    for(const row of session.rows){
+      if(!studentStats.has(row.name)){
+        studentStats.set(row.name,{name:row.name,group:row.group,photo:row.photo,present:0,total:0,confSum:0,confCount:0});
+      }
+      const s=studentStats.get(row.name);
+      s.total++;
+      if(row.present){s.present++;totalPresent++;if(row.confidence!=null){s.confSum+=row.confidence;s.confCount++;}}
+    }
+  }
+  const studentList=Array.from(studentStats.values()).sort((a,b)=>{
+    const pa=a.total?a.present/a.total:0;
+    const pb=b.total?b.present/b.total:0;
+    return pb-pa||a.name.localeCompare(b.name);
+  });
+  const totalPossible=groupHistory.reduce((s,h)=>s+h.total,0);
+  const avgPercent=totalPossible>0?Math.round((totalPresent/totalPossible)*100):0;
+  const best=studentList[0],worst=studentList[studentList.length-1];
+  const lastSessions=groupHistory.slice(0,10).reverse();
+  const chartBars=lastSessions.map(h=>{
+    const pct=h.total>0?Math.round((h.present/h.total)*100):0;
+    const cls=pct>=80?'high':(pct>=60?'medium':'low');
+    const d=new Date(h.date);
+    const dateLabel=d.toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit'});
+    return '<div class="mc-bar" title="'+dateLabel+': '+h.present+'/'+h.total+' ('+pct+'%)"><div class="mc-bar-pct">'+pct+'%</div><div class="mc-bar-fill '+cls+'" style="height:'+Math.max(4,pct)+'%"></div><div class="mc-bar-date">'+dateLabel+'</div></div>';
+  }).join('');
+  const tableRows=studentList.map((s,i)=>{
+    const pct=s.total>0?Math.round((s.present/s.total)*100):0;
+    const cls=pct>=80?'pct-high':(pct>=60?'pct-medium':'pct-low');
+    const rankCls=i===0?'top1':(i===1?'top2':(i===2?'top3':''));
+    const avgConf=s.confCount>0?Math.round(s.confSum/s.confCount):null;
+    return '<tr><td><span class="stat-rank '+rankCls+'">'+(i+1)+'</span></td><td><div class="att-name" style="gap:.5rem"><img src="'+s.photo+'" alt="" style="width:30px;height:30px"><span style="font-size:.82rem">'+escapeHtml(s.name)+'</span></div></td><td style="text-align:center">'+s.present+'/'+s.total+'</td><td><span class="stat-percent '+cls+'">'+pct+'%</span></td><td style="font-size:.75rem;color:var(--text-muted)">'+(avgConf!=null?avgConf+'%':'—')+'</td></tr>';
+  }).join('');
+  statsContent.innerHTML=
+    '<div class="stats-summary">'+
+      '<div class="stat-card info"><div class="stat-value">'+totalSessions+'</div><div class="stat-label">Сессий</div></div>'+
+      '<div class="stat-card success"><div class="stat-value">'+avgPercent+'%</div><div class="stat-label">Средняя посещаемость</div></div>'+
+      '<div class="stat-card best"><div class="stat-value" style="-webkit-text-fill-color:#fbbf24;background:none">🏆 '+escapeHtml(best.name.split(' ')[0])+'</div><div class="stat-label">Лучший ('+best.present+'/'+best.total+')</div></div>'+
+      '<div class="stat-card warn"><div class="stat-value" style="-webkit-text-fill-color:var(--danger);background:none">⚠️ '+escapeHtml(worst.name.split(' ')[0])+'</div><div class="stat-label">Худший ('+worst.present+'/'+worst.total+')</div></div>'+
+    '</div>'+
+    '<div class="mini-chart">'+chartBars+'</div>'+
+    '<div style="overflow-x:auto"><table class="stats-table"><thead><tr><th style="width:36px">#</th><th>Студент</th><th style="text-align:center;width:80px">Посещено</th><th style="width:80px">Процент</th><th style="width:90px">Ср. точность</th></tr></thead><tbody>'+tableRows+'</tbody></table></div>'+
+    '<div style="margin-top:1rem"><button class="btn btn-primary" onclick="exportStatsCSV()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Экспорт статистики в CSV</button></div>';
+}
+
+window.exportStatsCSV=()=>{
+  if(!selectedAttendanceGroup)return;
+  const history=getHistory().filter(h=>h.group===selectedAttendanceGroup);
+  if(history.length===0){alert('Нет данных для экспорта');return}
+  const studentStats=new Map();
+  for(const session of history){
+    for(const row of session.rows){
+      if(!studentStats.has(row.name))studentStats.set(row.name,{name:row.name,present:0,total:0});
+      const s=studentStats.get(row.name);s.total++;if(row.present)s.present++;
+    }
+  }
+  const list=Array.from(studentStats.values()).sort((a,b)=>{const pa=a.total?a.present/a.total:0;const pb=b.total?b.present/b.total:0;return pb-pa});
+  const totalSessions=history.length,totalPresent=history.reduce((s,h)=>s+h.present,0),totalPossible=history.reduce((s,h)=>s+h.total,0);
+  const avg=totalPossible>0?Math.round((totalPresent/totalPossible)*100):0;
+  let csv='\uFEFF';
+  csv+='Сводная статистика по группе\n';
+  csv+='Группа;'+selectedAttendanceGroup+'\n';
+  csv+='Всего сессий;'+totalSessions+'\n';
+  csv+='Средняя посещаемость;'+avg+'%\n\n';
+  csv+='№;ФИО;Посещено;Пропущено;Процент\n';
+  list.forEach((s,i)=>{const pct=s.total>0?Math.round((s.present/s.total)*100):0;csv+=(i+1)+';'+s.name+';'+s.present+';'+(s.total-s.present)+';'+pct+'%\n'});
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='сводка_'+selectedAttendanceGroup+'_'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();URL.revokeObjectURL(a.href);
+  showStatus('mainStatus','📥 Статистика скачана: '+selectedAttendanceGroup,'success',3000);
+};
 
 window.downloadHistory=(id)=>{
   const history=getHistory();const record=history.find(h=>h.id===id);
@@ -716,6 +1383,7 @@ window.downloadHistory=(id)=>{
   csv+='Группа;'+record.group+'\n';
   csv+='Дата;'+dateStr+'\n';
   csv+='Время;'+timeStr+'\n';
+  csv+='Тип;'+(record.isLive?'Live-камера':'Фото')+'\n';
   csv+='Всего студентов;'+record.total+'\n';
   csv+='Присутствуют;'+record.present+'\n';
   csv+='Отсутствуют;'+record.absent+'\n';
@@ -737,7 +1405,7 @@ window.downloadHistory=(id)=>{
 
 window.deleteHistory=id=>{
   if(!confirm('Удалить эту запись из истории?'))return;
-  saveHistory(getHistory().filter(x=>x.id!==id));renderHistory();
+  saveHistory(getHistory().filter(x=>x.id!==id));renderHistory();renderStats();
 };
 
 document.getElementById('exportBtn').addEventListener('click',()=>{
@@ -746,14 +1414,21 @@ document.getElementById('exportBtn').addEventListener('click',()=>{
   let csv='\uFEFF';
   csv+='Группа;'+group+'\n';
   csv+='Дата;'+new Date(date).toLocaleString('ru-RU')+'\n';
+  csv+='Тип;'+(currentResults.isLive?'Live-камера':'Фото')+'\n';
   csv+='Фото проанализировано;'+(photoCount||1)+'\n\n';
   csv+='ФИО;Статус;Точность;Группа\n';
-  rows.forEach(r=>{const status=r.present?'Присутствует':'Отсутствует';const conf=r.present?r.confidence+'%':'—';csv+=r.name+';'+status+';'+conf+';'+r.group+'\n'});
+  rows.forEach(r=>{const status=r.present?'Присутствует':'Отсутствует';const conf=r.present&&r.confidence!=null?r.confidence+'%':'—';csv+=r.name+';'+status+';'+conf+';'+r.group+'\n'});
   const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);
-  a.download='посещаемость_'+group+'_'+new Date(date).toISOString().slice(0,10)+'.csv';
+  a.download='посещаемость_'+group+'_'+new Date(date).toISOString().slice(0,10)+(currentResults.isLive?'_live':'')+'.csv';
   a.click();URL.revokeObjectURL(a.href);
   showStatus('mainStatus','CSV файл скачан!','success',3000);
+});
+
+// Остановка камеры при закрытии вкладки
+window.addEventListener('beforeunload', stopLive);
+document.addEventListener('visibilitychange', () => {
+  if(document.hidden) stopLive();
 });
 
 if ('serviceWorker' in navigator) {
@@ -766,7 +1441,7 @@ if ('serviceWorker' in navigator) {
 
 window.addEventListener('DOMContentLoaded',()=>{
   console.log('🚀 FaceID стартует...');
-  renderAdminGroups();renderStudents();renderAttendanceGroups();renderHistory();loadModels();
+  renderAdminGroups();renderStudents();renderAttendanceGroups();renderHistory();renderStats();loadModels();
 });
 </script>
 </body>
